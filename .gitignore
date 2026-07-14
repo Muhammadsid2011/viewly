@@ -1,0 +1,66 @@
+# Dependencies
+node_modules/
+/jspm_packages/
+/.pnp
+.pnp.js
+
+# Production / Build Output
+/dist/
+/build/
+/out/
+*.egg-info/
+
+# Environment Variables & Secrets (CRITICAL)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.pem
+*.key
+
+# Debug logs and runtime files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# Testing and Coverage
+/coverage/
+/.nyc_output
+.jest/
+.mocha/
+cypress/videos/
+cypress/screenshots/
+.playwright/
+
+# IDEs, Editors, and OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Frontend-specific caches and diagnostics
+.eslintcache
+.stylelintcache
+.vite/
+.parcel-cache/
+.turbo/
+stats.html
+
+# Local database / storage data (if using local DBs)
+*.db
+*.sqlite
