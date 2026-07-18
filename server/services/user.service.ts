@@ -1,5 +1,5 @@
 import UserRepository from '../repositories/user.repository';
-import { CreateUserDto, LoginUserDto } from '../types/user.types';
+import { CreateUserDto, LoginUserDto, UpdateUserProfileDto } from '../types/user.types';
 import { ApiError } from '../utils/ApiError';
 
 class UserService{
@@ -68,6 +68,15 @@ class UserService{
     }
     static async getCurrentUser(id: string) {
         const user = await UserRepository.findById(id);
+        if(!user){
+            throw new ApiError(404, "User not found")
+        }
+        return user;
+    }
+
+    static async updateUserProfile(id: string, data: Partial<UpdateUserProfileDto>) {
+        const user = await UserRepository
+        .findByIdAndUpdateUsernameAndEmail(id, data.email, data.username);
         if(!user){
             throw new ApiError(404, "User not found")
         }

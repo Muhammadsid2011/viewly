@@ -88,7 +88,30 @@ export const changePasswordSchema = z.object({
   }),
 });
 
-// Type inference
+export const updateUserProfileSchema = z
+  .object({
+    username: z
+      .string()
+      .trim()
+      .min(3, "Username must be at least 3 characters")
+      .max(30, "Username cannot exceed 30 characters")
+      .optional(),
+
+    email: z
+      .email("Invalid email address")
+      .trim()
+      .toLowerCase()
+      .optional(),
+  })
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    {
+      message: "At least one field (username or email) must be provided",
+    }
+  );
+
+  // Type inference
+export type UpdateUserProfileDto = z.infer<typeof updateUserProfileSchema>;
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
 export type LoginUserInput = z.infer<typeof loginUserSchema>;

@@ -143,11 +143,24 @@ const getCurrentUser = async (req: Request | any, res: Response, next: NextFunct
    }) 
 }
 
+const updateUserProfile = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const user = await UserService.updateUserProfile(req.user._id, req.body);
+        return res.status(200).json({
+            success: true,
+            data: user
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
     login,
     register,
     refreshAccessToken,
     logout,
     changePassword,
-    getCurrentUser
+    getCurrentUser,
+    updateUserProfile
 }

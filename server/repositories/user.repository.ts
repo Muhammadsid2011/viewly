@@ -14,6 +14,26 @@ class UserReposiitory {
             $or: conditions
         });
     }
+    static findByIdAndUpdateUsernameAndEmail(
+        id: string,
+        email?: string,
+        username?: string
+    ) {
+        const update: Record<string, string> = {};
+
+        if (email) update.email = email;
+        if (username) update.username = username;
+
+        if (Object.keys(update).length === 0) {
+            return null;
+        }
+
+        return User.findByIdAndUpdate(
+            id,
+            { $set: update },
+            { new: true }
+        );
+    }
 
     static create(data: CreateUserDto) {
         return User.create(data)
@@ -40,7 +60,7 @@ class UserReposiitory {
             }
         )
     }
-    static updatePassword(id: string, newPassword: string){
+    static updatePassword(id: string, newPassword: string) {
         return User.findByIdAndUpdate(id, {
             password: newPassword
         })

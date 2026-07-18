@@ -26,6 +26,11 @@ export interface CreateUserDto {
     password: string;
 }
 
+export interface UpdateUserProfileDto {
+    email: string;
+    username: string;
+}
+
 export interface LoginUserDto{
     email: string;
     password: string;
