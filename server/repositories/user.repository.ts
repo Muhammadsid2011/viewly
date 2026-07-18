@@ -3,18 +3,18 @@ import { CreateUserDto } from "../types/user.types";
 
 class UserReposiitory {
     static findByEmailOrUsername(email?: string, username?: string) {
-        const or = [];
+        const conditions = [];
 
-        if (email) {
-            or.push({ email });
-        }
+        if (email) conditions.push({ email });
+        if (username) conditions.push({ username });
 
-        if (username) {
-            or.push({ username });
-        }
+        if (conditions.length === 0) return null;
 
-        return User.findOne({ $or: or });
+        return User.findOne({
+            $or: conditions
+        });
     }
+
     static create(data: CreateUserDto) {
         return User.create(data)
     }
@@ -24,7 +24,21 @@ class UserReposiitory {
     static updateRefreshToken(id: string, token: string) {
         return User.findByIdAndUpdate(id, {
             refreshToken: token
-        });
+        },
+            {
+                new: true
+            });
+    }
+    static unsetRefreshToken(id: string) {
+        return User.findByIdAndUpdate(id, {
+            $unset: {
+                refreshToken: 1
+            },
+        },
+            {
+                new: true
+            }
+        )
     }
 }
 

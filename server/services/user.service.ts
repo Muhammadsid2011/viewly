@@ -1,11 +1,12 @@
 import UserRepository from '../repositories/user.repository';
 import { CreateUserDto, LoginUserDto } from '../types/user.types';
+import { ApiError } from '../utils/ApiError';
 
 class UserService{
     static async register(data: CreateUserDto) {
         const exsistingUser = await UserRepository.findByEmailOrUsername(data.email, data.username);
         if (exsistingUser) {
-            throw new Error("Email or username already exsists");
+            throw new ApiError(409,"Email or username already exsists");
         }
     
         const user = await UserRepository.create(data);
@@ -31,12 +32,12 @@ class UserService{
         const user = await UserRepository.findByEmailOrUsername(data.email);
     
         if (!user) {
-            throw new Error("Invalid email or password")
+            throw new ApiError(401,"Invalid email or password")
         }
         const isPasswordCorrect = await user.isPasswordCorrect(data.password)
     
         if (!isPasswordCorrect) {
-            throw new Error("Invalid email or password")
+            throw new ApiError(401,"Invalid email or password")
         }
     
         const accessToken = user.generateAccessToken();
@@ -49,6 +50,10 @@ class UserService{
             accessToken,
             refreshToken,
         };
+    }
+
+    static async logout(id: string){
+        await UserRepository.unsetRefreshToken(id);
     }
 
 }

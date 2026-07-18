@@ -1,19 +1,23 @@
 import type { NextFunction, Request, Response } from "express";
 import UserService from "../services/user.service";
-import  jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { env } from "../config/env";
-import User from "../models/user.model";
+import { cookieOptions } from "../config/cookies";
+import { ApiError } from "../utils/ApiError";
+import UserReposiitory from "../repositories/user.repository";
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const result = UserService.login(req.body);
+        const result = await UserService.login(req.body);
 
-        res.status(200).json({
-            success: true,
-            data: result
-        });
+        return res.status(200)
+            .cookie("accessToken", result.accessToken, cookieOptions)
+            .cookie("refreshToken", result.refreshToken, cookieOptions)
+            .json({
+                success: true,
+                data: result
+            });
     } catch (error) {
-        res.status(500).json({ error })
         next(error)
     }
 }
@@ -22,17 +26,33 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await UserService.register(req.body);
 
-        res.status(201).json({
-            success: true,
-            data: result,
-        });
+        return res.status(201)
+            .cookie("accessToken", result.accessToken, cookieOptions)
+            .cookie("refreshToken", result.refreshToken, cookieOptions)
+            .json({
+                success: true,
+                data: result,
+            });
     } catch (error) {
-        res.status(500).json({ error })
         next(error);
     }
 };
 
-export const refreshAccessToken = async (req: Request, res: Response, next: NextFunction) => {
+const logout = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        await UserService.logout(req.user._id)
+
+        return res.status(200)
+            .clearCookie("accessToken", cookieOptions)
+            .clearCookie("refreshToken", cookieOptions)
+            .json({ message: "User logged out successfully" })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+const refreshAccessToken = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
 
@@ -40,7 +60,7 @@ export const refreshAccessToken = async (req: Request, res: Response, next: Next
 
 
         if (!incomingRefreshToken) {
-            throw new Error("Refresh token missing");
+            throw new ApiError(401, "Refresh token missing");
         }
 
 
@@ -49,19 +69,22 @@ export const refreshAccessToken = async (req: Request, res: Response, next: Next
             env.REFRESH_TOKEN_SECRET
         );
 
+        if (typeof decoded === "string") {
+            throw new ApiError(401, "Invalid token");
+        }
 
-        const user = await User.findById(decoded._id);
+        const user = await UserReposiitory.findById(decoded._id);
 
 
         if (!user) {
-            throw new Error("Invalid refresh token");
+            throw new ApiError(401, "Invalid refresh token");
         }
 
 
         if (
             user.refreshToken !== incomingRefreshToken
         ) {
-            throw new Error("Refresh token expired or reused");
+            throw new ApiError(401, "Refresh token expired or reused");
         }
 
 
@@ -80,23 +103,15 @@ export const refreshAccessToken = async (req: Request, res: Response, next: Next
         });
 
 
-        res
-            .cookie(
-                "accessToken",
-                newAccessToken,
-                {
-                    httpOnly: true,
-                    secure: true
-                }
-            )
-            .cookie(
-                "refreshToken",
-                newRefreshToken,
-                {
-                    httpOnly: true,
-                    secure: true
-                }
-            )
+        return res.cookie(
+            "accessToken",
+            newAccessToken,
+            cookieOptions
+        ).cookie(
+            "refreshToken",
+            newRefreshToken,
+            cookieOptions
+        )
             .json({
                 message: "Token refreshed"
             });
@@ -111,5 +126,7 @@ export const refreshAccessToken = async (req: Request, res: Response, next: Next
 
 export {
     login,
-    register
+    register,
+    refreshAccessToken,
+    logout
 }
