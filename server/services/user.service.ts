@@ -66,6 +66,13 @@ class UserService{
 
         await UserRepository.updatePassword(id, newPassword);
     }
+    static async getCurrentUser(id: string) {
+        const user = await UserRepository.findById(id);
+        if(!user){
+            throw new ApiError(404, "User not found")
+        }
+        return user;
+    }
 }
 
 export default UserService;

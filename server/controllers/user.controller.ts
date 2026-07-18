@@ -135,10 +135,19 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
     }
 };
 
+const getCurrentUser = async (req: Request | any, res: Response, next: NextFunction) => {
+   const user = await UserService.getCurrentUser(req.user._id);
+   return res.status(200).json({
+       success: true,
+       data: user
+   }) 
+}
+
 export {
     login,
     register,
     refreshAccessToken,
     logout,
-    changePassword
+    changePassword,
+    getCurrentUser
 }
