@@ -8,6 +8,10 @@ const envSchema = z.object({
 
   REFRESH_TOKEN_SECRET: z.string().min(1),
   REFRESH_TOKEN_EXPIRY: z.string().min(1),
+
+  CLOUDINARY_CLOUD_NAME: z.string().min(1),
+  CLODINARY_API_KEY: z.string().min(1),
+  CLOUDINARY_API_SECRET: z.string().min(1),
 });
 
 const parsed = envSchema.safeParse(process.env);
