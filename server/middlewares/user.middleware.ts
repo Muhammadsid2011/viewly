@@ -39,7 +39,6 @@ export const verifyJWT = async (
 
 
     const user = await User.findById(decoded._id)
-      .select("-password -refreshToken");
 
 
     if (!user) {

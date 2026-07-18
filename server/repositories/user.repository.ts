@@ -40,6 +40,11 @@ class UserReposiitory {
             }
         )
     }
+    static updatePassword(id: string, newPassword: string){
+        return User.findByIdAndUpdate(id, {
+            password: newPassword
+        })
+    }
 }
 
 export default UserReposiitory;

@@ -52,6 +52,17 @@ const logout = async (req: Request | any, res: Response, next: NextFunction) => 
     }
 }
 
+const changePassword = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { oldPassword, newPassword } = req.body
+        await UserService.changePassword(req.user._id, oldPassword, newPassword)
+
+        return res.status(200).json({ message: "password changed successfully" })
+    } catch (error) {
+        next(error)
+    }
+}
+
 const refreshAccessToken = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
@@ -128,5 +139,6 @@ export {
     login,
     register,
     refreshAccessToken,
-    logout
+    logout,
+    changePassword
 }

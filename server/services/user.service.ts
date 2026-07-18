@@ -56,6 +56,16 @@ class UserService{
         await UserRepository.unsetRefreshToken(id);
     }
 
+    static async changePassword(id: string, oldPassword: string, newPassword: string) {
+        const user = await UserRepository.findById(id);
+        const isPasswordCorrect = await user?.isPasswordCorrect(oldPassword);
+
+        if(!isPasswordCorrect){
+            throw new ApiError(401, "Old password is incorrect");
+        }
+
+        await UserRepository.updatePassword(id, newPassword);
+    }
 }
 
 export default UserService;
