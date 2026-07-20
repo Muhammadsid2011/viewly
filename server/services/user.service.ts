@@ -82,6 +82,13 @@ class UserService{
         }
         return user;
     }
+    static async updateUserAvatar(id: string, avatarLocalUrl: string) {
+        const user = await UserRepository.updateAvatar(id, avatarLocalUrl);
+        if(!user){
+            throw new ApiError(404, "User not found")
+        }
+        return user;
+    }
 }
 
 export default UserService;

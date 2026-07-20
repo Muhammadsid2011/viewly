@@ -65,6 +65,13 @@ class UserReposiitory {
             password: newPassword
         })
     }
+    static updateAvatar(id: string, avatarUrl: string) {
+        return User.findByIdAndUpdate(id, {
+            avatar: avatarUrl
+        }, {
+            new: true
+        })
+    }
 }
 
 export default UserReposiitory;
