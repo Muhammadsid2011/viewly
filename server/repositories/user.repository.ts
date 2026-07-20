@@ -72,6 +72,13 @@ class UserReposiitory {
             new: true
         })
     }
+    static updateCoverImage(id: string, coverImageUrl: string) {
+        return User.findByIdAndUpdate(id, {
+            coverImage: coverImageUrl
+        }, {
+            new: true
+        })
+    }
 }
 
 export default UserReposiitory;

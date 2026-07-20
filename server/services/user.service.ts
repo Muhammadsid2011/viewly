@@ -89,6 +89,13 @@ class UserService{
         }
         return user;
     }
+    static async updateUserCoverImage(id: string, coverImageUrl: string) {
+        const user = await UserRepository.updateCoverImage(id, coverImageUrl);
+        if(!user){
+            throw new ApiError(404, "User not found")
+        }
+        return user;
+    }
 }
 
 export default UserService;

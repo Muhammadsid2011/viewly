@@ -167,6 +167,18 @@ const updateUserAvatar = async (req: Request | any, res: Response, next: NextFun
     }
 }
 
+const updateUserCoverImage = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const user = await UserService.updateUserCoverImage(req.user._id, req.file?.path);
+        return res.status(200).json({
+            success: true,
+            data: user
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
     login,
     register,
@@ -175,5 +187,6 @@ export {
     changePassword,
     getCurrentUser,
     updateUserProfile,
-    updateUserAvatar
+    updateUserAvatar,
+    updateUserCoverImage
 }

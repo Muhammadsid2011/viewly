@@ -7,7 +7,8 @@ import {
   refreshAccessToken,
   getCurrentUser,
   updateUserProfile,
-  updateUserAvatar
+  updateUserAvatar,
+  updateUserCoverImage
 } from "../controllers/user.controller";
 import { validate } from "../middlewares/validate.middleware";
 import {
@@ -38,5 +39,9 @@ router.patch("/update-user-profile", verifyJWT, validate(updateUserProfileSchema
 router.patch("/update-user-avatar", verifyJWT, upload.fields([
   { name: "avatar", maxCount: 1 }
 ]), updateUserAvatar)
+
+router.patch("/update-user-cover-image", verifyJWT, upload.fields([
+  { name: "coverImage", maxCount: 1 }
+]), updateUserCoverImage)
 
 export default router;
