@@ -1,3 +1,4 @@
+import { uploadOncloudinary } from '../config/cloudinary';
 import UserRepository from '../repositories/user.repository';
 import { CreateUserDto, LoginUserDto, UpdateUserProfileDto } from '../types/user.types';
 import { ApiError } from '../utils/ApiError';
@@ -83,14 +84,27 @@ class UserService{
         return user;
     }
     static async updateUserAvatar(id: string, avatarLocalUrl: string) {
-        const user = await UserRepository.updateAvatar(id, avatarLocalUrl);
+
+        const avatar = await uploadOncloudinary(avatarLocalUrl);
+
+        if (!avatar?.url) {
+            throw new ApiError(500, "Failed to upload avatar");
+        }
+
+        const user = await UserRepository.updateAvatar(id, avatar.url);
         if(!user){
             throw new ApiError(404, "User not found")
         }
         return user;
     }
     static async updateUserCoverImage(id: string, coverImageUrl: string) {
-        const user = await UserRepository.updateCoverImage(id, coverImageUrl);
+        const coverImage = await uploadOncloudinary(coverImageUrl);
+
+        if (!coverImage?.url) {
+            throw new ApiError(500, "Failed to upload cover image");
+        }
+
+        const user = await UserRepository.updateCoverImage(id, coverImage.url);
         if(!user){
             throw new ApiError(404, "User not found")
         }

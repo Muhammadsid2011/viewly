@@ -44,4 +44,6 @@ router.patch("/update-user-cover-image", verifyJWT, upload.fields([
   { name: "coverImage", maxCount: 1 }
 ]), updateUserCoverImage)
 
+// TODO: make get user profile route and get Watch History route
+
 export default router;
