@@ -21,7 +21,7 @@ export interface CreateUserDto {
     username: string;
     email: string;
     fullName: string;
-    avatar: string;
+    avatar?: string;
     coverImage?: string;
     password: string;
 }

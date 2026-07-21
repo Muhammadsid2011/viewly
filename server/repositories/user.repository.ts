@@ -41,13 +41,17 @@ class UserReposiitory {
     static findById(id: string) {
         return User.findById(id)
     }
-    static updateRefreshToken(id: string, token: string) {
-        return User.findByIdAndUpdate(id, {
-            refreshToken: token
-        },
-            {
-                new: true
-            });
+    static async updateRefreshToken(id: string, token: string) {
+        const user = await User.findById(id).select("+refreshToken");
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        user.refreshToken = token;
+        await user.save({ validateBeforeSave: false });
+
+        return user;
     }
     static unsetRefreshToken(id: string) {
         return User.findByIdAndUpdate(id, {
@@ -60,10 +64,17 @@ class UserReposiitory {
             }
         )
     }
-    static updatePassword(id: string, newPassword: string) {
-        return User.findByIdAndUpdate(id, {
-            password: newPassword
-        })
+    static async updatePassword(id: string, newPassword: string) {
+        const user = await User.findById(id);
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        return user;
     }
     static updateAvatar(id: string, avatarUrl: string) {
         return User.findByIdAndUpdate(id, {

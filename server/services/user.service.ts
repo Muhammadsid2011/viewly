@@ -30,7 +30,7 @@ class UserService{
     }
     
     static async login(data: LoginUserDto) {
-        const user = await UserRepository.findByEmailOrUsername(data.email);
+        const user = await UserRepository.findByEmailOrUsername(data.email)?.select("+password");
     
         if (!user) {
             throw new ApiError(401,"Invalid email or password")
@@ -45,9 +45,18 @@ class UserService{
         const refreshToken = user.generateRefreshToken();
     
         await UserRepository.updateRefreshToken(user.id, refreshToken);
+
     
         return {
-            user,
+            user: {
+                _id: user._id,
+                email: user.email,
+                username: user.username,
+                fullName: user.fullName,
+                avatar: user.avatar,
+                accessToken,
+                refreshToken,
+            },
             accessToken,
             refreshToken,
         };
@@ -58,14 +67,17 @@ class UserService{
     }
 
     static async changePassword(id: string, oldPassword: string, newPassword: string) {
-        const user = await UserRepository.findById(id);
+        const user = await UserRepository.findById(id).select("+password");
+        console.log("user", user);
         const isPasswordCorrect = await user?.isPasswordCorrect(oldPassword);
 
         if(!isPasswordCorrect){
             throw new ApiError(401, "Old password is incorrect");
         }
 
-        await UserRepository.updatePassword(id, newPassword);
+        const updatedUser = await UserRepository.updatePassword(id, newPassword);
+        console.log("updatedUser", updatedUser);
+        await updatedUser?.save();
     }
     static async getCurrentUser(id: string) {
         const user = await UserRepository.findById(id);

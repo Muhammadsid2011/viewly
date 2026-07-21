@@ -10,6 +10,9 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await UserService.login(req.body);
 
+        res.clearCookie("accessToken", cookieOptions);
+        res.clearCookie("refreshToken", cookieOptions);
+
         return res.status(200)
             .cookie("accessToken", result.accessToken, cookieOptions)
             .cookie("refreshToken", result.refreshToken, cookieOptions)
@@ -54,11 +57,12 @@ const logout = async (req: Request | any, res: Response, next: NextFunction) => 
 
 const changePassword = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
-        const { oldPassword, newPassword } = req.body
+        const { oldPassword, newPassword } = req.body;
         await UserService.changePassword(req.user._id, oldPassword, newPassword)
 
         return res.status(200).json({ message: "password changed successfully" })
     } catch (error) {
+        res.status(400).json({ message: (error as Error).message })
         next(error)
     }
 }
@@ -84,7 +88,7 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
             throw new ApiError(401, "Invalid token");
         }
 
-        const user = await UserReposiitory.findById(decoded._id);
+        const user = await UserReposiitory.findById(decoded._id).select("+refreshToken");
 
 
         if (!user) {
@@ -135,7 +139,7 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
     }
 };
 
-const getCurrentUser = async (req: Request | any, res: Response, next: NextFunction) => {
+const getCurrentUser = async (req: Request | any, res: Response) => {
    const user = await UserService.getCurrentUser(req.user._id);
    return res.status(200).json({
        success: true,
@@ -157,7 +161,7 @@ const updateUserProfile = async (req: Request | any, res: Response, next: NextFu
 
 const updateUserAvatar = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
-        const user = await UserService.updateUserAvatar(req.user._id, req.file?.path);
+        const user = await UserService.updateUserAvatar(req.user._id, req.files?.avatar[0]?.path);
         return res.status(200).json({
             success: true,
             data: user
@@ -169,7 +173,7 @@ const updateUserAvatar = async (req: Request | any, res: Response, next: NextFun
 
 const updateUserCoverImage = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
-        const user = await UserService.updateUserCoverImage(req.user._id, req.file?.path);
+        const user = await UserService.updateUserCoverImage(req.user._id, req.files?.coverImage[0]?.path);
         return res.status(200).json({
             success: true,
             data: user

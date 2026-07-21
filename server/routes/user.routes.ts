@@ -30,7 +30,7 @@ router.post("/logout", verifyJWT, logout)
 
 router.post("/change-password", verifyJWT, validate(changePasswordSchema), changePassword)
 
-router.post("/refresh-accesstoken", verifyJWT, refreshAccessToken)
+router.post("/refresh-accesstoken", refreshAccessToken)
 
 router.get("/current-user", verifyJWT, getCurrentUser)
 

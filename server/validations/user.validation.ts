@@ -72,20 +72,16 @@ export const updateUserSchema = z.object({
 });
 
 export const changePasswordSchema = z.object({
-  body: z.object({
-    oldPassword: z
-      .string()
-      .min(1, "Old password is required"),
+  oldPassword: z.string().min(1, "Old password is required"),
 
-    newPassword: z
-      .string()
-      .min(8, "New password must be at least 8 characters long")
-      .max(100, "New password is too long")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-        "New password must contain at least one uppercase letter, one lowercase letter, and one number"
-      ),
-  }),
+  newPassword: z
+    .string()
+    .min(8, "New password must be at least 8 characters long")
+    .max(100, "New password is too long")
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
+      "New password must contain at least one uppercase letter, one lowercase letter, and one number"
+    ),
 });
 
 export const updateUserProfileSchema = z
@@ -110,7 +106,7 @@ export const updateUserProfileSchema = z
     }
   );
 
-  // Type inference
+// Type inference
 export type UpdateUserProfileDto = z.infer<typeof updateUserProfileSchema>;
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
