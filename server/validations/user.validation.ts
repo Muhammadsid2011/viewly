@@ -25,7 +25,7 @@ export const registerUserSchema = z.object({
 
   avatar: z
     .string()
-    .url("Avatar must be a valid URL"),
+    .url("Avatar must be a valid URL").optional(),
 
   coverImage: z
     .string()
