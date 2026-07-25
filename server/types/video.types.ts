@@ -12,3 +12,11 @@ export interface IVideo{
     createdAt: Date;
     updatedAt: Date;
 }
+export interface CreateVideoDto {
+    title: string;
+    videoFile: string;
+    thumbnail: string;
+    duration: number;
+    owner: mongoose.Types.ObjectId;
+    isPublished?: boolean;
+}
