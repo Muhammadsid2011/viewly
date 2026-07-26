@@ -70,8 +70,26 @@ const getVideoById = async (req: Request, res: Response, next: NextFunction) => 
     }
 }
 
+const updateVideo = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const videoId = new mongoose.Types.ObjectId(id as string);
+        const videoData = req.body;
+        const thumbnail = req.files?.thumbnail?.[0];
+        const video = await VideoService.updateVideo(videoId, videoData, thumbnail ? thumbnail.path : undefined);
+        res.status(200).json({
+            success: true,
+            message: "Video updated successfully",
+            data: video,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
     getAllVideos,
     publishVideo,
-    getVideoById
+    getVideoById,
+    updateVideo
 }

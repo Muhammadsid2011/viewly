@@ -1,7 +1,7 @@
 import mongoose, { isValidObjectId, PipelineStage } from "mongoose";
 import Video from "../models/video.model";
 import { ApiError } from "../utils/ApiError";
-import { CreateVideoDto } from "../types/video.types";
+import { CreateVideoDto, IVideo } from "../types/video.types";
 
 class VideoRepository {
     static findByTitle = async (title: string) => {
@@ -90,6 +90,10 @@ class VideoRepository {
     }
     static findById = async (id: mongoose.Types.ObjectId) => {
         const video = await Video.findById(id).populate("owner", "fullName username avatar");
+        return video;
+    }
+    static updateVideo = async (id: mongoose.Types.ObjectId, data: Partial<IVideo>) => {
+        const video = await Video.findByIdAndUpdate(id, data, { new: true }).populate("owner", "fullName username avatar");
         return video;
     }
 }

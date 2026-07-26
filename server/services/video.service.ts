@@ -44,5 +44,22 @@ class VideoService {
         }
         return video
     }
+    static updateVideo = async (videoId: mongoose.Types.ObjectId, data: Partial<CreateVideoDto>, thumbnail?: string) => {
+        if (!videoId) {
+            throw new ApiError(400, "video id is required")
+        }
+        if (thumbnail) {
+            const uploadedThumbnail = await uploadOncloudinary(thumbnail);
+            if (!uploadedThumbnail) {
+                throw new ApiError(500, "Failed to upload thumbnail");
+            }
+            data.thumbnail = uploadedThumbnail.url;
+        }
+        const video = await VideoRepository.updateVideo(videoId, data);
+        if (!video) {
+            throw new ApiError(404, "video not found")
+        }
+        return video
+    }
 }
 export default VideoService;
