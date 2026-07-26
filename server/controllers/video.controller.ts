@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import VideoService from "../services/video.service";
 import { ApiError } from "../utils/ApiError";
+import mongoose from "mongoose";
 
 const getAllVideos = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -29,7 +30,7 @@ const getAllVideos = async (req: Request, res: Response, next: NextFunction) => 
     }
 }
 
-const publishVideo = async (req: Request| any, res: Response, next: NextFunction) => {
+const publishVideo = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
         let videoData = req.body;
         const videoFile = req.files?.videoFile?.[0];
@@ -42,7 +43,7 @@ const publishVideo = async (req: Request| any, res: Response, next: NextFunction
         videoData.videoFile = videoFile.path;
         videoData.thumbnail = thumbnail.path;
 
-        const video = await VideoService.publishVideo(videoData,req.user._id.toString());
+        const video = await VideoService.publishVideo(videoData, req.user._id.toString());
         res.status(201).json({
             success: true,
             message: "Video published successfully",
@@ -53,7 +54,24 @@ const publishVideo = async (req: Request| any, res: Response, next: NextFunction
     }
 }
 
+const getVideoById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const videoId = new mongoose.Types.ObjectId(id as string);
+
+        const video = await VideoService.getVIdeoById(videoId);
+        res.status(200).json({
+            success: true,
+            message: "Video fetched successfully",
+            data: video,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
     getAllVideos,
-    publishVideo
+    publishVideo,
+    getVideoById
 }

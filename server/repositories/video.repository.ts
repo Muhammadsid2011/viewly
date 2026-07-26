@@ -84,8 +84,12 @@ class VideoRepository {
         );
         return videos;
     }
-    static creteVideo = async (data: CreateVideoDto) => {
+    static createVideo = async (data: CreateVideoDto) => {
         const video = await Video.create(data);
+        return video;
+    }
+    static findById = async (id: mongoose.Types.ObjectId) => {
+        const video = await Video.findById(id).populate("owner", "fullName username avatar");
         return video;
     }
 }
