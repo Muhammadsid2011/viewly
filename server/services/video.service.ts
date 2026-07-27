@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { uploadOncloudinary } from "../config/cloudinary";
+import { deleteImageOnCloudinary, deleteVideoOnCloudinary, uploadOncloudinary } from "../config/cloudinary";
 import VideoRepository from "../repositories/video.repository";
 import { CreateVideoDto } from "../types/video.types";
 import { ApiError } from "../utils/ApiError";
@@ -60,6 +60,14 @@ class VideoService {
             throw new ApiError(404, "video not found")
         }
         return video
+    }
+    static deleteVideo = async (id: mongoose.Types.ObjectId) => {
+        const video = await VideoRepository.deleteVideoById(id)
+        if(!video){
+            throw new ApiError(404, "Video not found")
+        }
+        deleteVideoOnCloudinary(video.videoFile as string)
+        deleteImageOnCloudinary(video.thumbnail as string)
     }
 }
 export default VideoService;

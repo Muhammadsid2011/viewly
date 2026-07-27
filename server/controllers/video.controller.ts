@@ -87,9 +87,22 @@ const updateVideo = async (req: Request | any, res: Response, next: NextFunction
     }
 }
 
+const deleteVideo = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params
+        await VideoService.deleteVideo(new mongoose.Types.ObjectId(id as string));
+        return res.status(200).json({
+            message: "Video deleted successfully"
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export {
     getAllVideos,
     publishVideo,
     getVideoById,
-    updateVideo
+    updateVideo,
+    deleteVideo
 }

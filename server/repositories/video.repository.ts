@@ -96,5 +96,9 @@ class VideoRepository {
         const video = await Video.findByIdAndUpdate(id, data, { new: true }).populate("owner", "fullName username avatar");
         return video;
     }
+    static deleteVideoById = async (id: mongoose.Types.ObjectId) => {
+        const video = await Video.findByIdAndDelete(id)
+        return video;
+    }
 }
 export default VideoRepository;
