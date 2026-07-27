@@ -69,5 +69,12 @@ class VideoService {
         deleteVideoOnCloudinary(video.videoFile as string)
         deleteImageOnCloudinary(video.thumbnail as string)
     }
+    static togglePublishStatus = async (id: mongoose.Types.ObjectId) => {
+        const publishStatus = await VideoRepository.getIsPublishedStatus(id);
+        if (publishStatus === undefined || publishStatus === null) {
+            throw new ApiError(404, "Video not found");
+        }
+        await VideoRepository.setIsPublishedStatus(id, !publishStatus)
+    }
 }
 export default VideoService;

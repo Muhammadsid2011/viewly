@@ -99,10 +99,24 @@ const deleteVideo = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
+const togglePublishStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;        
+        await VideoService.togglePublishStatus(new mongoose.Types.ObjectId(id as string))
+
+        return res.status(200).json({
+            message: "Video publish status toggled successfully"
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export {
     getAllVideos,
     publishVideo,
     getVideoById,
     updateVideo,
-    deleteVideo
+    deleteVideo,
+    togglePublishStatus
 }

@@ -100,5 +100,29 @@ class VideoRepository {
         const video = await Video.findByIdAndDelete(id)
         return video;
     }
+    static getIsPublishedStatus = async (id: mongoose.Types.ObjectId): Promise<boolean> => {
+        const video = await Video.aggregate([
+            {
+                $match: {
+                    _id: id
+                }
+            },
+            {
+                $project: {
+                    isPublished: 1
+                }
+            }
+        ]);
+        return video[0]?.isPublished;
+    }
+    static setIsPublishedStatus = async (id: mongoose.Types.ObjectId, publishStatus: boolean) => {
+        await Video.findByIdAndUpdate(id, {
+            $set: {
+                isPublished: publishStatus
+            }
+        },
+            { new: true }
+        );
+    }
 }
 export default VideoRepository;
