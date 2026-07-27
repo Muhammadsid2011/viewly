@@ -68,7 +68,6 @@ class UserService{
 
     static async changePassword(id: string, oldPassword: string, newPassword: string) {
         const user = await UserRepository.findById(id).select("+password");
-        console.log("user", user);
         const isPasswordCorrect = await user?.isPasswordCorrect(oldPassword);
 
         if(!isPasswordCorrect){
@@ -76,7 +75,6 @@ class UserService{
         }
 
         const updatedUser = await UserRepository.updatePassword(id, newPassword);
-        console.log("updatedUser", updatedUser);
         await updatedUser?.save();
     }
     static async getCurrentUser(id: string) {

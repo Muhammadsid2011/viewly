@@ -3,6 +3,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes";
+import videoRouter from "./routes/video.routes"
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
 
 app.use("/api/users", userRouter);
+app.use("/api/videos", videoRouter);
 
 export default app;
