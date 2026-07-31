@@ -7,7 +7,10 @@ class PlaylistRepository{
             name,
             description,
             owner: ownerId
-        })
+        });
+    }
+    static findById(id: mongoose.Types.ObjectId){
+        return Playlist.findById(id);
     }
 }
 

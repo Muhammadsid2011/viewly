@@ -21,13 +21,7 @@ class VideoRepository {
                         $regex: query as string,
                         $options: "i",
                     },
-                },
-                {
-                    description: {
-                        $regex: query as string,
-                        $options: "i",
-                    },
-                },
+                }
             ];
         }
 
