@@ -6,6 +6,7 @@ node_modules/
 
 # Production / Build Output
 /dist/
+dist
 /build/
 /out/
 *.egg-info/

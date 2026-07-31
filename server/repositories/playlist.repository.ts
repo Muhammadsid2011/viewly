@@ -1,16 +1,30 @@
 import mongoose from "mongoose";
 import Playlist from "../models/playlist.model";
 
-class PlaylistRepository{
-    static createPlaylist(name: string, description: string, ownerId: mongoose.Types.ObjectId){
+class PlaylistRepository {
+    static createPlaylist(name: string, description: string, owner: mongoose.Types.ObjectId) {
         return Playlist.create({
             name,
             description,
-            owner: ownerId
+            owner
         });
     }
-    static findById(id: mongoose.Types.ObjectId){
+    static findById(id: mongoose.Types.ObjectId) {
         return Playlist.findById(id);
+    }
+    static getByOwnerId(id: mongoose.Types.ObjectId) {
+        return Playlist.find({
+            owner: id
+        }).populate("owner", "fullName username avatar")
+    }
+    static addVideo(id: mongoose.Types.ObjectId, videoId: mongoose.Types.ObjectId) {
+        return Playlist.findByIdAndUpdate(
+            id,
+            {
+                $addToSet: { videos: videoId }
+            },
+            { new: true }
+        );
     }
 }
 

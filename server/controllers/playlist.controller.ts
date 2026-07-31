@@ -28,7 +28,31 @@ const getPlaylistById = async (req: Request | any, res: Response, next: NextFunc
     }
 }
 
+const getUsersPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const playlists = await PlaylistService.getUsersPlaylist(new mongoose.Types.ObjectId(req.user._id));
+        return res.status(200).json({
+            message: "playlists fetched successfully",
+            data: playlists
+        });
+    } catch (error) {
+        next(error)
+    }
+}
+
+const addVideoToPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const {playlistId, videoId} = req.params
+        await PlaylistService.addVideoToPlaylist(new mongoose.Types.ObjectId(playlistId),new mongoose.Types.ObjectId(videoId))
+        return res.status(204).json({})
+    } catch (error) {
+        next(error)
+    }
+}
+
 export {
     createPlaylist,
-    getPlaylistById
+    getPlaylistById,
+    getUsersPlaylist,
+    addVideoToPlaylist
 }
