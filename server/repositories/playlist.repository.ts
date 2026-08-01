@@ -42,6 +42,12 @@ class PlaylistRepository {
             }
         );
     }
+    static delete(id: mongoose.Types.ObjectId, ownerId: mongoose.Types.ObjectId){
+        return Playlist.deleteOne({
+            _id: id,
+            owner: ownerId
+        })
+    }
 }
 
 export default PlaylistRepository;

@@ -5,6 +5,7 @@ import { createPlaylistSchema } from "../validations/playlist.validation";
 import {
     addVideoToPlaylist,
     createPlaylist,
+    deletePlaylist,
     getPlaylistById,
     getUsersPlaylist,
     removeVideoFromPlaylist
@@ -19,5 +20,6 @@ router.get("/:playlistId", getPlaylistById);
 router.get("/user/:id", getUsersPlaylist);
 router.patch("/add-video/:playlistId/:videoId", addVideoToPlaylist)
 router.delete("/remove-video/:playlistId/:videoId", removeVideoFromPlaylist)
+router.delete("/:id", deletePlaylist)
 
 export default router;

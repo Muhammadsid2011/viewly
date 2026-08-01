@@ -65,10 +65,22 @@ const removeVideoFromPlaylist = async (req: Request | any, res: Response, next: 
     }
 }
 
+const deletePlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        await PlaylistService.deletePlaylist(id, req.user._id);
+
+        return res.status(204).send()
+    } catch (error) {
+        next(error)
+    }
+}
+
 export {
     createPlaylist,
     getPlaylistById,
     getUsersPlaylist,
     addVideoToPlaylist,
     removeVideoFromPlaylist,
+    deletePlaylist
 }

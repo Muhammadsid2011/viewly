@@ -1,22 +1,21 @@
 import mongoose from "mongoose";
 import PlaylistRepository from "../repositories/playlist.repository";
 import { ApiError } from "../utils/ApiError";
-import { NextFunction } from "express";
 
 class PlaylistService {
     static createPlaylist(name: string, description: string, owner: mongoose.Types.ObjectId) {
         const playlist = PlaylistRepository.createPlaylist(name, description, owner);
         return playlist;
     }
-    static getPlaylistById(id: mongoose.Types.ObjectId) {
-        const playlist = PlaylistRepository.findById(id);
+    static async getPlaylistById(id: mongoose.Types.ObjectId) {
+        const playlist = await PlaylistRepository.findById(id);
         if (!playlist) {
             throw new ApiError(404, "Playlist not found");
         }
         return playlist;
     }
-    static getUsersPlaylist(userId: mongoose.Types.ObjectId) {
-        const playlists = PlaylistRepository.getByOwnerId(userId);
+    static async getUsersPlaylist(userId: mongoose.Types.ObjectId) {
+        const playlists = await PlaylistRepository.getByOwnerId(userId);
         if (!playlists) {
             throw new ApiError(404, "No playlists were found")
         }
@@ -33,6 +32,12 @@ class PlaylistService {
             throw new ApiError(400, "Insufficient arguments")
         }
         return PlaylistRepository.removeVideo(id, ownerId, videoId)
+    }
+    static deletePlaylist(id: mongoose.Types.ObjectId, ownerId: mongoose.Types.ObjectId){
+        if(!id || !ownerId){
+            throw new ApiError(400, "Insufficient arguments")
+        }
+        return PlaylistRepository.delete(id, ownerId)
     }
 }
 
