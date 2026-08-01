@@ -6,6 +6,7 @@ const createPlaylist = async (req: Request | any, res: Response, next: NextFunct
     try {
         const { name, description } = req.body;
         const playlist = await PlaylistService.createPlaylist(name, description, req.user._id);
+
         return res.status(201).json({
             message: "PlayList created successfully",
             data: playlist
@@ -19,6 +20,7 @@ const getPlaylistById = async (req: Request | any, res: Response, next: NextFunc
     try {
         const { playlistId } = req.params;
         const playlist = await PlaylistService.getPlaylistById(new mongoose.Types.ObjectId(playlistId));
+
         return res.status(200).json({
             message: "playlist fetched successfully",
             data: playlist
@@ -31,6 +33,7 @@ const getPlaylistById = async (req: Request | any, res: Response, next: NextFunc
 const getUsersPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
         const playlists = await PlaylistService.getUsersPlaylist(new mongoose.Types.ObjectId(req.user._id));
+
         return res.status(200).json({
             message: "playlists fetched successfully",
             data: playlists
@@ -42,9 +45,21 @@ const getUsersPlaylist = async (req: Request | any, res: Response, next: NextFun
 
 const addVideoToPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
-        const {playlistId, videoId} = req.params
-        await PlaylistService.addVideoToPlaylist(new mongoose.Types.ObjectId(playlistId),new mongoose.Types.ObjectId(videoId))
-        return res.status(204).json({})
+        const { playlistId, videoId } = req.params
+        await PlaylistService.addVideoToPlaylist(new mongoose.Types.ObjectId(playlistId), new mongoose.Types.ObjectId(videoId))
+
+        return res.status(204).send()
+    } catch (error) {
+        next(error)
+    }
+}
+
+const removeVideoFromPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { playlistId, videoId } = req.params;
+        await PlaylistService.removeVideoFromPlaylist(playlistId, req.user._id, videoId)
+
+        return res.status(204).send()
     } catch (error) {
         next(error)
     }
@@ -54,5 +69,6 @@ export {
     createPlaylist,
     getPlaylistById,
     getUsersPlaylist,
-    addVideoToPlaylist
+    addVideoToPlaylist,
+    removeVideoFromPlaylist,
 }

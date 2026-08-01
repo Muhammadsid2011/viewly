@@ -26,6 +26,22 @@ class PlaylistRepository {
             { new: true }
         );
     }
+    static removeVideo(id: mongoose.Types.ObjectId, ownerId: mongoose.Types.ObjectId, videoId: mongoose.Types.ObjectId) {
+        return Playlist.findOneAndUpdate(
+            {
+                _id: id,
+                owner: ownerId,
+            },
+            {
+                $pull: {
+                    videos: new mongoose.Types.ObjectId(videoId),
+                },
+            },
+            {
+                new: true,
+            }
+        );
+    }
 }
 
 export default PlaylistRepository;
