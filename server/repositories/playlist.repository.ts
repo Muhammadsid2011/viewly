@@ -10,12 +10,25 @@ class PlaylistRepository {
         });
     }
     static findById(id: mongoose.Types.ObjectId) {
-        return Playlist.findById(id).populate("owner", "fullName username avatar");
+        return Playlist.findById(id)
+            .populate("owner", "fullName username avatar").populate({
+                path: "videos",
+                populate: {
+                    path: "owner",
+                    select: "username fullName avatar",
+                },
+            });
     }
     static getByOwnerId(id: mongoose.Types.ObjectId) {
         return Playlist.find({
             owner: id
-        }).populate("owner", "fullName username avatar")
+        }).populate("owner", "fullName username avatar").populate({
+            path: "videos",
+            populate: {
+                path: "owner",
+                select: "username fullName avatar",
+            },
+        })
     }
     static addVideo(id: mongoose.Types.ObjectId, videoId: mongoose.Types.ObjectId) {
         return Playlist.findByIdAndUpdate(
@@ -42,7 +55,7 @@ class PlaylistRepository {
             }
         );
     }
-    static delete(id: mongoose.Types.ObjectId, ownerId: mongoose.Types.ObjectId){
+    static delete(id: mongoose.Types.ObjectId, ownerId: mongoose.Types.ObjectId) {
         return Playlist.deleteOne({
             _id: id,
             owner: ownerId
