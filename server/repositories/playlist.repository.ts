@@ -10,7 +10,7 @@ class PlaylistRepository {
         });
     }
     static findById(id: mongoose.Types.ObjectId) {
-        return Playlist.findById(id);
+        return Playlist.findById(id).populate("owner", "fullName username avatar");
     }
     static getByOwnerId(id: mongoose.Types.ObjectId) {
         return Playlist.find({
