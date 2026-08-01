@@ -4,8 +4,7 @@ import mongoose from "mongoose";
 
 const createPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
-        const { name, description } = req.body;
-        const playlist = await PlaylistService.createPlaylist(name, description, req.user._id);
+        const playlist = await PlaylistService.createPlaylist(req.body, req.user._id);
 
         return res.status(201).json({
             message: "PlayList created successfully",
@@ -75,6 +74,19 @@ const deletePlaylist = async (req: Request | any, res: Response, next: NextFunct
         next(error)
     }
 }
+const updatePlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const playlist = await PlaylistService.updatePlaylist(id, req.user._id, req.body)
+
+        res.status(200).json({
+            mesasage: "playlist updated successfully",
+            data: playlist
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 
 export {
     createPlaylist,
@@ -82,5 +94,6 @@ export {
     getUsersPlaylist,
     addVideoToPlaylist,
     removeVideoFromPlaylist,
-    deletePlaylist
+    deletePlaylist,
+    updatePlaylist
 }

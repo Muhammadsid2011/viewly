@@ -6,3 +6,7 @@ export interface IPlaylist{
     videos: mongoose.Types.ObjectId[];
     owner: mongoose.Types.ObjectId;
 }
+export interface CreatePlaylistDto{
+    name: string;
+    description: string
+}

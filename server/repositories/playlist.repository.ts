@@ -61,6 +61,23 @@ class PlaylistRepository {
             owner: ownerId
         })
     }
+    static update(id: mongoose.Types.ObjectId,ownerId: mongoose.Types.ObjectId, name?: string, description?: string){
+        const update: Record<string,string> = {};
+        if (name) update.name = name;
+        if (description) update.description = description;
+
+        if (Object.keys(update).length === 0) {
+            return null;
+        }
+        return Playlist.findOneAndUpdate(
+            {
+                _id: id,
+                owner: ownerId
+            },
+            {$set: update},
+            {new: true}
+        )
+    }
 }
 
 export default PlaylistRepository;
