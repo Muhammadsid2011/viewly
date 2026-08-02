@@ -24,8 +24,11 @@ class SubscriptionRepository {
 
         return !!subscription;
     }
-
-
+    static getSubscribersCount(channelId: mongoose.Types.ObjectId) {
+        return  Subscription.countDocuments({
+            channel: channelId,
+        });
+    }
 }
 
 export default SubscriptionRepository;
