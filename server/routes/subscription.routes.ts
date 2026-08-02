@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+    getTotalSubscribedChannelsCount,
     getTotalSubscribersCount,
     toggleSubscription
 } from "../controllers/subscription.controller"
@@ -10,6 +11,7 @@ const router = Router();
 router.use(verifyJWT)
 
 router.post("/toggle/:channelId", toggleSubscription)
-router.get("/count/:channelId", getTotalSubscribersCount)
+router.get("/count-subscribers/:channelId", getTotalSubscribersCount)
+router.get("/count-channels/:subscriberId", getTotalSubscribedChannelsCount)
 
 export default router;

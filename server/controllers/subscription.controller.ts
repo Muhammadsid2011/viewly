@@ -15,7 +15,7 @@ const toggleSubscription = async (req: Request | any, res: Response, next: NextF
 const getTotalSubscribersCount = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { channelId } = req.params;
-        const count = await SubscriptionService.getTotalSubscribersCount(new mongoose.Types.ObjectId(channelId))
+        const count = await SubscriptionService.getTotalSubscribersCount(new mongoose.Types.ObjectId(channelId as string))
 
         res.status(200).json({
             count
@@ -24,7 +24,22 @@ const getTotalSubscribersCount = async (req: Request, res: Response, next: NextF
         next(error)
     }
 }
+
+const getTotalSubscribedChannelsCount = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { subscriberId } = req.params;
+        const count = await SubscriptionService.getTotalSubscribedChannelsCount(new mongoose.Types.ObjectId(subscriberId as string))
+        
+        res.status(200).json({
+            count
+        })
+   } catch (error) {
+        next(error)
+   } 
+}
+
 export {
     toggleSubscription,
-    getTotalSubscribersCount
+    getTotalSubscribersCount,
+    getTotalSubscribedChannelsCount
 }

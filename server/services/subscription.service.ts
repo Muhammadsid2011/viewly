@@ -17,6 +17,13 @@ class SubscriptionService {
         const count = await SubscriptionRepository.getSubscribersCount(channelId)
         return count;
     }
+    static async getTotalSubscribedChannelsCount(sunscriberId: mongoose.Types.ObjectId){
+        if(!sunscriberId){
+            throw new ApiError(400, "channel id is required")
+        }
+        const count = await SubscriptionRepository.getSubscribedChannelsCount(sunscriberId)
+        return count;
+    }
 }
 
 export default SubscriptionService
