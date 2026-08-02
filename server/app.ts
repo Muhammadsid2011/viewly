@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes";
 import videoRouter from "./routes/video.routes";
 import playlistRouter from "./routes/playlist.routes"
+import subscriptionRouter from "./routes/subscription.routes";
 
 const app = express();
 
@@ -18,5 +19,6 @@ app.use(express.static("public"))
 app.use("/api/users", userRouter);
 app.use("/api/videos", videoRouter);
 app.use("/api/playlist", playlistRouter);
+app.use("/api/subscription", subscriptionRouter);
 
 export default app;
