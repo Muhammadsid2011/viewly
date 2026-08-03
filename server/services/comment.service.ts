@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import CommentRepository from "../repositories/comment.repository";
 import { ApiError } from "../utils/ApiError";
+import { createCommentDto } from "../types/comment.types";
 
 class CommentService {
     static async getVideosComment(videoId: mongoose.Types.ObjectId, page?: number, limit?: number) {
@@ -10,6 +11,10 @@ class CommentService {
         const comments = await CommentRepository.getVideoComments(videoId, page, limit)
 
         return comments
+    }
+    static async addComment(data: createCommentDto, owner: mongoose.Types.ObjectId){
+        const comment = await CommentRepository.create(data, owner)
+        return comment;
     }
 }
 

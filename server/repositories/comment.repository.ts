@@ -1,13 +1,14 @@
 import mongoose, { isValidObjectId, PipelineStage } from "mongoose";
 import Comment from "../models/comment.model";
 import { ApiError } from "../utils/ApiError";
+import { createCommentDto } from "../types/comment.types";
 
 class CommentRepository{
-    static getVideoComments = async (
+    static async getVideoComments(
         videoId: mongoose.Types.ObjectId,
         page?: number,
         limit?: number
-    ) => {
+    ){
         if (!isValidObjectId(videoId)) {
             throw new ApiError(400, "Invalid video id");
         }
@@ -59,6 +60,13 @@ class CommentRepository{
 
         return comments;
     };
+
+    static create(data: createCommentDto, owner: mongoose.Types.ObjectId){
+        return Comment.create({
+            ...data,
+            owner
+        })
+    }
 }
 
 export default CommentRepository;

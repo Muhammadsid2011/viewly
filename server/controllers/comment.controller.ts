@@ -18,6 +18,21 @@ const getVideosComment = async (req: Request, res: Response, next: NextFunction)
     }
 }
 
+const addComment = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { content, video, } = req.body;
+        const id = req.user._id as string;
+
+        const comment = await CommentService.addComment({
+            content,
+            video
+        }, new mongoose.Types.ObjectId(id))
+    } catch (error) {
+        next(error)
+    }
+}
+
 export {
-    getVideosComment
+    getVideosComment,
+    addComment
 }

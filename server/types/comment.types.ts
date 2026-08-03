@@ -6,3 +6,7 @@ export interface IComment{
     video: mongoose.Types.ObjectId;
     owner: mongoose.Types.ObjectId;
 }
+export interface createCommentDto{
+    content: string;
+    video: mongoose.Types.ObjectId;
+}
