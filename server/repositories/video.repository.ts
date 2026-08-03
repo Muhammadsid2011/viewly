@@ -13,7 +13,7 @@ class VideoRepository {
             isPublished: true,
         };
 
-        // Search by title/description
+        // Search by title
         if (query) {
             matchStage.$or = [
                 {
