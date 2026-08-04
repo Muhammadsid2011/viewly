@@ -20,6 +20,10 @@ class CommentService {
         const comment = await CommentRepository.update(data, commentId)
         return comment;
     }
+    static async deleteComment(commentId: mongoose.Types.ObjectId, owner: mongoose.Types.ObjectId){
+        const comment = await CommentRepository.delete(commentId, owner)
+        return comment;
+    }
 }
 
 export default CommentService

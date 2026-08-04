@@ -70,6 +70,9 @@ class CommentRepository{
     static update(data: Partial<createCommentDto>, commentId: mongoose.Types.ObjectId){
         return Comment.findByIdAndUpdate(commentId, data, { new: true });
     }
+    static delete(commentId: mongoose.Types.ObjectId, owner: mongoose.Types.ObjectId){
+        return  Comment.findOneAndDelete({ _id: commentId, owner });
+    }
 }
 
 export default CommentRepository;

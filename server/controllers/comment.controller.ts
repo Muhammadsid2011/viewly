@@ -47,8 +47,21 @@ const updateComment = async (req: Request | any, res: Response, next: NextFuncti
     }
 }
 
+const deleteComment = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { commentId } = req.params;
+        const id = req.user._id as string;
+        const comment = await CommentService.deleteComment(new mongoose.Types.ObjectId(commentId), new mongoose.Types.ObjectId(id))
+
+        return res.status(204).send()
+    } catch (error) {
+        next(error)
+    }
+}
+
 export {
     getVideosComment,
     addComment,
-    updateComment
+    updateComment,
+    deleteComment
 }
