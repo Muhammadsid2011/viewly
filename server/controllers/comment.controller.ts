@@ -32,7 +32,23 @@ const addComment = async (req: Request | any, res: Response, next: NextFunction)
     }
 }
 
+const updateComment = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { content } = req.body;
+        const { commentId } = req.params;
+        const comment = await CommentService.updateComment({ content }, new mongoose.Types.ObjectId(commentId))
+
+        return res.status(200).json({
+            message: "Comment updated successfully",
+            data: comment
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export {
     getVideosComment,
-    addComment
+    addComment,
+    updateComment
 }

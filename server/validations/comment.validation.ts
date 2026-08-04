@@ -15,4 +15,12 @@ export const createCommentSchema = z.object({
       }),
 });
 
+export const updateCommentSchema = z.object({
+    content: z
+      .string()
+      .trim()
+      .min(1, "Content is required")
+});
+
 export type CreateCommentInput = z.infer<typeof createCommentSchema>;
+export type UpdateCommentInput = z.infer<typeof updateCommentSchema>;

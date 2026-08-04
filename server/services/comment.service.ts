@@ -16,6 +16,10 @@ class CommentService {
         const comment = await CommentRepository.create(data, owner)
         return comment;
     }
+    static async updateComment(data: Partial<createCommentDto>, commentId: mongoose.Types.ObjectId){
+        const comment = await CommentRepository.update(data, commentId)
+        return comment;
+    }
 }
 
 export default CommentService

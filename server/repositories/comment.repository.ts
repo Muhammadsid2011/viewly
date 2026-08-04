@@ -67,6 +67,9 @@ class CommentRepository{
             owner
         })
     }
+    static update(data: Partial<createCommentDto>, commentId: mongoose.Types.ObjectId){
+        return Comment.findByIdAndUpdate(commentId, data, { new: true });
+    }
 }
 
 export default CommentRepository;
