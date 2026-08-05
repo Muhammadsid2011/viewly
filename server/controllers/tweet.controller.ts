@@ -46,7 +46,20 @@ const updateTweet = async (req: Request | any, res: Response, next: NextFunction
     }
 }
 
+const deleteTweet = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { tweetId } = req.params;
+        await TweetService.deleteTweet(new mongoose.Types.ObjectId(tweetId as string));
+
+        return res.status(204).send()
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
     createTweet,
-    getTweetsByOwnerId
+    getTweetsByOwnerId,
+    updateTweet,
+    deleteTweet
 }
