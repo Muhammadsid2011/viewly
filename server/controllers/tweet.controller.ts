@@ -17,6 +17,21 @@ const createTweet = async (req: Request | any, res: Response, next: NextFunction
     }
 }
 
+const getTweetsByOwnerId = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const ownerId = req.params.ownerId;
+        const tweets = await TweetService.getTweetsByOwnerId(new mongoose.Types.ObjectId(ownerId));
+
+        return res.status(200).json({
+            message: "Tweets fetched successfully",
+            data: tweets
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
-    createTweet
+    createTweet,
+    getTweetsByOwnerId
 }

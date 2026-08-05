@@ -10,6 +10,13 @@ class TweetService {
         const tweet = await TweetRepository.create(content, owner);
         return tweet;
     }
+    static async getTweetsByOwnerId(ownerId: mongoose.Types.ObjectId) {
+        if (!ownerId) {
+            throw new ApiError(400,"Owner ID is required to fetch tweets.");
+        }
+        const tweets = await TweetRepository.getByOwnerId(ownerId);
+        return tweets;
+    }
 }
 
 export default TweetService;

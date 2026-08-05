@@ -8,5 +8,8 @@ class TweetRepository {
             owner
         })
     }
+    static getByOwnerId(ownerId: mongoose.Types.ObjectId){
+        return Tweet.find({ owner: ownerId }).populate("owner", "username fullName avatar");
+    }
 }
 export default TweetRepository
