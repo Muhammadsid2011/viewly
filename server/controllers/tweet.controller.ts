@@ -19,12 +19,27 @@ const createTweet = async (req: Request | any, res: Response, next: NextFunction
 
 const getTweetsByOwnerId = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
-        const ownerId = req.params.ownerId;
-        const tweets = await TweetService.getTweetsByOwnerId(new mongoose.Types.ObjectId(ownerId));
+        const { ownerId } = req.params;
+        const tweets = await TweetService.getTweetsByOwnerId(new mongoose.Types.ObjectId(ownerId as string));
 
         return res.status(200).json({
             message: "Tweets fetched successfully",
             data: tweets
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+const updateTweet = async (req: Request | any, res: Response, next: NextFunction) => {
+    try {
+        const { tweetId } = req.params;
+        const { content } = req.body;
+        const updatedTweet = await TweetService.updateTweet(new mongoose.Types.ObjectId(tweetId as string), content);
+
+        return res.status(200).json({
+            message: "Tweet updated successfully",
+            data: updatedTweet
         });
     } catch (error) {
         next(error);

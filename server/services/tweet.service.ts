@@ -17,6 +17,13 @@ class TweetService {
         const tweets = await TweetRepository.getByOwnerId(ownerId);
         return tweets;
     }
+    static async updateTweet(tweetId: mongoose.Types.ObjectId, content: string) {
+        if (!tweetId || !content) {
+            throw new ApiError(400,"Tweet ID and content are required to update a tweet.");
+        }
+        const tweet = await TweetRepository.update(tweetId, content);
+        return tweet;
+    }
 }
 
 export default TweetService;
