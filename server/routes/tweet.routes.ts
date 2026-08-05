@@ -15,7 +15,7 @@ router.use(verifyJWT)
 
 router.post("/",validate(createTweetSchema), createTweet);
 router.get("/:ownerId", getTweetsByOwnerId);
-router.put("/:tweetId", updateTweet);
+router.patch("/:tweetId", updateTweet);
 router.delete("/:tweetId", deleteTweet);
 
 export default router;
