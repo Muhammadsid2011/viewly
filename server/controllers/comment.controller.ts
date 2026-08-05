@@ -9,7 +9,7 @@ const getVideosComment = async (req: Request, res: Response, next: NextFunction)
 
         const comments = await CommentService.getVideosComment(new mongoose.Types.ObjectId(videoId as string), page as number, limit as number)
 
-        return res.send(200).json({
+        return res.status(200).json({
             message: "comments fetched succsessfully",
             data: comments
         })
@@ -27,6 +27,11 @@ const addComment = async (req: Request | any, res: Response, next: NextFunction)
             content,
             video
         }, new mongoose.Types.ObjectId(id))
+
+        res.status(201).json({
+            message: "Comment added successfully",
+            data: comment
+        })
     } catch (error) {
         next(error)
     }
@@ -51,7 +56,7 @@ const deleteComment = async (req: Request | any, res: Response, next: NextFuncti
     try {
         const { commentId } = req.params;
         const id = req.user._id as string;
-        const comment = await CommentService.deleteComment(new mongoose.Types.ObjectId(commentId), new mongoose.Types.ObjectId(id))
+        await CommentService.deleteComment(new mongoose.Types.ObjectId(commentId), new mongoose.Types.ObjectId(id))
 
         return res.status(204).send()
     } catch (error) {

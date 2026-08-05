@@ -68,10 +68,10 @@ class CommentRepository{
         })
     }
     static update(data: Partial<createCommentDto>, commentId: mongoose.Types.ObjectId){
-        return Comment.findByIdAndUpdate(commentId, data, { new: true });
+        return Comment.findByIdAndUpdate(commentId, data, { new: true }).populate("owner", "fullName username avatar").populate("video", "title description thumbnail");
     }
     static delete(commentId: mongoose.Types.ObjectId, owner: mongoose.Types.ObjectId){
-        return  Comment.findOneAndDelete({ _id: commentId, owner });
+        return  Comment.findOneAndDelete({ _id: commentId, owner }).populate("owner", "fullName username avatar").populate("video", "title description thumbnail");
     }
 }
 
