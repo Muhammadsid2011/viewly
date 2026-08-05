@@ -5,8 +5,8 @@ import mongoose from "mongoose";
 const createTweet = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
         const { content } = req.body;
-        const owner = req.user._id as string;
-        const tweet = await TweetService.createTweet(content, new mongoose.Types.ObjectId(owner));
+        const id = req.user._id as string;
+        const tweet = await TweetService.createTweet(content, new mongoose.Types.ObjectId(id));
 
         return res.status(201).json({
             message: "Tweet created successfully",
@@ -35,7 +35,8 @@ const updateTweet = async (req: Request | any, res: Response, next: NextFunction
     try {
         const { tweetId } = req.params;
         const { content } = req.body;
-        const updatedTweet = await TweetService.updateTweet(new mongoose.Types.ObjectId(tweetId as string), content);
+        const id = req.user._id as string;
+        const updatedTweet = await TweetService.updateTweet(new mongoose.Types.ObjectId(tweetId as string), content, new mongoose.Types.ObjectId(id));
 
         return res.status(200).json({
             message: "Tweet updated successfully",
@@ -49,7 +50,8 @@ const updateTweet = async (req: Request | any, res: Response, next: NextFunction
 const deleteTweet = async (req: Request | any, res: Response, next: NextFunction) => {
     try {
         const { tweetId } = req.params;
-        await TweetService.deleteTweet(new mongoose.Types.ObjectId(tweetId as string));
+        const id = req.user._id as string;
+        await TweetService.deleteTweet(new mongoose.Types.ObjectId(tweetId as string), new mongoose.Types.ObjectId(id));
 
         return res.status(204).send()
     } catch (error) {

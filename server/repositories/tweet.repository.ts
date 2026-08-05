@@ -11,11 +11,11 @@ class TweetRepository {
     static getByOwnerId(ownerId: mongoose.Types.ObjectId){
         return Tweet.find({ owner: ownerId }).populate("owner", "username fullName avatar");
     }
-    static update(tweetId: mongoose.Types.ObjectId, content: string){
-        return Tweet.findByIdAndUpdate(tweetId, { content }, { new: true }).populate("owner", "username fullName avatar");
+    static update(tweetId: mongoose.Types.ObjectId,ownerId: mongoose.Types.ObjectId, content: string){
+        return Tweet.findByIdAndUpdate({ _id: tweetId, owner: ownerId }, { content }, { new: true }).populate("owner", "username fullName avatar");
     }
-    static delete(tweetId: mongoose.Types.ObjectId){
-        return Tweet.findByIdAndDelete(tweetId);
+    static delete(id: mongoose.Types.ObjectId, ownerId: mongoose.Types.ObjectId){
+        return Tweet.findByIdAndDelete({ _id: id, owner: ownerId });
     }
 }
 export default TweetRepository

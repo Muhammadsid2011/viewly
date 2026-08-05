@@ -17,21 +17,21 @@ class TweetService {
         const tweets = await TweetRepository.getByOwnerId(ownerId);
         return tweets;
     }
-    static async updateTweet(tweetId: mongoose.Types.ObjectId, content: string) {
-        if (!tweetId || !content) {
-            throw new ApiError(400, "Tweet ID and content are required to update a tweet.");
+    static async updateTweet(tweetId: mongoose.Types.ObjectId, content: string, ownerId: mongoose.Types.ObjectId) {
+        if (!tweetId || !content || !ownerId) {
+            throw new ApiError(400, "Tweet ID, content, and owner ID are required to update a tweet.");
         }
-        const tweet = await TweetRepository.update(tweetId, content);
+        const tweet = await TweetRepository.update(tweetId, ownerId, content);
         if (!tweet) {
             throw new ApiError(404, "Tweet not found.");
         }
         return tweet;
     }
-    static async deleteTweet(tweetId: mongoose.Types.ObjectId) {
-        if (!tweetId) {
-            throw new ApiError(400, "Tweet ID is required to delete a tweet.");
+    static async deleteTweet(tweetId: mongoose.Types.ObjectId, ownerId: mongoose.Types.ObjectId) {
+        if (!tweetId || !ownerId) {
+            throw new ApiError(400, "Tweet ID and owner ID are required to delete a tweet.");
         }
-        const result = await TweetRepository.delete(tweetId);
+        const result = await TweetRepository.delete(tweetId, ownerId);
         if (!result) {
             throw new ApiError(404, "Tweet not found.");
         }
