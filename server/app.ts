@@ -9,6 +9,7 @@ import subscriptionRouter from "./routes/subscription.routes";
 import commentRouter from "./routes/comment.routes";
 import tweetRouter from "./routes/tweet.routes";
 import likeRouter from "./routes/like.routes";
+import dashboardRouter from "./routes/dashboard.routes";
 
 const app = express();
 
@@ -26,5 +27,6 @@ app.use("/api/subscription", subscriptionRouter);
 app.use("/api/comments", commentRouter);
 app.use("/api/tweets", tweetRouter);
 app.use("/api/likes", likeRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 export default app;
