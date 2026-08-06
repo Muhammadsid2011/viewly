@@ -118,14 +118,14 @@ class LikeRepository {
             }
         ];
 
-        const aggregate = Video.aggregate(pipeline);
+        const aggregate = Like.aggregate(pipeline);
 
         const options = {
             page: Number(page) || 1,
             limit: Number(limit) || 10
         };
 
-        const videos = await (Video as any).aggregatePaginate(aggregate, options);
+        const videos = await (Like as any).aggregatePaginate(aggregate, options);
         return videos;
     }
 }

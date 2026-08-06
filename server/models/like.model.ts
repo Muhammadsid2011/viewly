@@ -1,5 +1,6 @@
 import type { ILike } from "../types/like.types";
 import mongoose, { Schema } from "mongoose";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 const likeSchema = new Schema<ILike>({
     video: {
@@ -19,6 +20,7 @@ const likeSchema = new Schema<ILike>({
         ref: "User",
     }
 })
+likeSchema.plugin(mongooseAggregatePaginate);
 
 const Like = mongoose.model("Like", likeSchema);
 
