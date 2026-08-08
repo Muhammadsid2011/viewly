@@ -18,7 +18,7 @@ const getVideosComment = async (req: Request, res: Response, next: NextFunction)
     }
 }
 
-const addComment = async (req: Request | any, res: Response, next: NextFunction) => {
+const addComment = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { content, video, } = req.body;
         const id = req.user._id as string;
@@ -37,11 +37,11 @@ const addComment = async (req: Request | any, res: Response, next: NextFunction)
     }
 }
 
-const updateComment = async (req: Request | any, res: Response, next: NextFunction) => {
+const updateComment = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { content } = req.body;
         const { commentId } = req.params;
-        const comment = await CommentService.updateComment({ content }, new mongoose.Types.ObjectId(commentId))
+        const comment = await CommentService.updateComment({ content }, new mongoose.Types.ObjectId(commentId as string))
 
         return res.status(200).json({
             message: "Comment updated successfully",
@@ -52,11 +52,11 @@ const updateComment = async (req: Request | any, res: Response, next: NextFuncti
     }
 }
 
-const deleteComment = async (req: Request | any, res: Response, next: NextFunction) => {
+const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { commentId } = req.params;
         const id = req.user._id as string;
-        await CommentService.deleteComment(new mongoose.Types.ObjectId(commentId), new mongoose.Types.ObjectId(id))
+        await CommentService.deleteComment(new mongoose.Types.ObjectId(commentId as string), new mongoose.Types.ObjectId(id))
 
         return res.status(204).send()
     } catch (error) {

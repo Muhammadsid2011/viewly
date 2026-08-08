@@ -30,8 +30,9 @@ const getAllVideos = async (req: Request, res: Response, next: NextFunction) => 
     }
 }
 
-const publishVideo = async (req: Request | any, res: Response, next: NextFunction) => {
+const publishVideo = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        req.files = req.files as { [fieldname: string]: Express.Multer.File[] };
         let videoData = req.body;
         const videoFile = req.files?.videoFile?.[0];
         const thumbnail = req.files?.thumbnail?.[0];
@@ -70,11 +71,12 @@ const getVideoById = async (req: Request, res: Response, next: NextFunction) => 
     }
 }
 
-const updateVideo = async (req: Request | any, res: Response, next: NextFunction) => {
+const updateVideo = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
         const videoId = new mongoose.Types.ObjectId(id as string);
         const videoData = req.body;
+        req.files = req.files as { [fieldname: string]: Express.Multer.File[] };
         const thumbnail = req.files?.thumbnail?.[0];
         const video = await VideoService.updateVideo(videoId, videoData, thumbnail ? thumbnail.path : undefined);
         res.status(200).json({

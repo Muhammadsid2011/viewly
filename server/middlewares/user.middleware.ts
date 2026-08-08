@@ -12,7 +12,7 @@ interface JwtPayload {
 }
 
 export const verifyJWT = async (
-  req: Request | any,
+  req: Request ,
   res: Response,
   next: NextFunction
 ) => {

@@ -5,7 +5,7 @@ import Subscription from "../models/subscription.model";
 import Like from "../models/like.model";
 import { ApiError } from "../utils/ApiError";
 
-const getChannelStats = async (req: Request | any, res: Response, next: NextFunction) => {
+const getChannelStats = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = new mongoose.Types.ObjectId(req.user._id);
 
@@ -54,7 +54,7 @@ const getChannelStats = async (req: Request | any, res: Response, next: NextFunc
     }
 };
 
-const getChannelVideos = async (req: Request | any, res: Response, next: NextFunction) => {
+const getChannelVideos = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = new mongoose.Types.ObjectId(req.user._id);
         const { page = 1, limit = 10, sortBy = "createdAt", sortType = "desc" } = req.query;

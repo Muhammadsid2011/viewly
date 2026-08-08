@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import PlaylistService from "../services/playlist.service";
 import mongoose from "mongoose";
 
-const createPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+const createPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const playlist = await PlaylistService.createPlaylist(req.body, req.user._id);
 
@@ -15,10 +15,10 @@ const createPlaylist = async (req: Request | any, res: Response, next: NextFunct
     }
 }
 
-const getPlaylistById = async (req: Request | any, res: Response, next: NextFunction) => {
+const getPlaylistById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { playlistId } = req.params;
-        const playlist = await PlaylistService.getPlaylistById(new mongoose.Types.ObjectId(playlistId));
+        const playlist = await PlaylistService.getPlaylistById(new mongoose.Types.ObjectId(playlistId as string));
 
         return res.status(200).json({
             message: "playlist fetched successfully",
@@ -29,7 +29,7 @@ const getPlaylistById = async (req: Request | any, res: Response, next: NextFunc
     }
 }
 
-const getUsersPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+const getUsersPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const playlists = await PlaylistService.getUsersPlaylist(new mongoose.Types.ObjectId(req.user._id));
 
@@ -42,10 +42,10 @@ const getUsersPlaylist = async (req: Request | any, res: Response, next: NextFun
     }
 }
 
-const addVideoToPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+const addVideoToPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { playlistId, videoId } = req.params
-        await PlaylistService.addVideoToPlaylist(new mongoose.Types.ObjectId(playlistId), new mongoose.Types.ObjectId(videoId))
+        await PlaylistService.addVideoToPlaylist(new mongoose.Types.ObjectId(playlistId as string), new mongoose.Types.ObjectId(videoId as string))
 
         return res.status(204).send()
     } catch (error) {
@@ -53,10 +53,10 @@ const addVideoToPlaylist = async (req: Request | any, res: Response, next: NextF
     }
 }
 
-const removeVideoFromPlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+const removeVideoFromPlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { playlistId, videoId } = req.params;
-        await PlaylistService.removeVideoFromPlaylist(playlistId, req.user._id, videoId)
+        await PlaylistService.removeVideoFromPlaylist(new mongoose.Types.ObjectId(playlistId as string), new mongoose.Types.ObjectId(req.user._id), new mongoose.Types.ObjectId(videoId as string))
 
         return res.status(204).send()
     } catch (error) {
@@ -64,23 +64,23 @@ const removeVideoFromPlaylist = async (req: Request | any, res: Response, next: 
     }
 }
 
-const deletePlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+const deletePlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        await PlaylistService.deletePlaylist(id, req.user._id);
+        await PlaylistService.deletePlaylist(new mongoose.Types.ObjectId(id as string), new mongoose.Types.ObjectId(req.user._id));
 
         return res.status(204).send()
     } catch (error) {
         next(error)
     }
 }
-const updatePlaylist = async (req: Request | any, res: Response, next: NextFunction) => {
+const updatePlaylist = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        const playlist = await PlaylistService.updatePlaylist(id, req.user._id, req.body)
+        const playlist = await PlaylistService.updatePlaylist(new mongoose.Types.ObjectId(id as string), new mongoose.Types.ObjectId(req.user._id), req.body)
 
         res.status(200).json({
-            mesasage: "playlist updated successfully",
+            message: "playlist updated successfully",
             data: playlist
         })
     } catch (error) {

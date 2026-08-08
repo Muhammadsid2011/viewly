@@ -41,7 +41,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-const logout = async (req: Request | any, res: Response, next: NextFunction) => {
+const logout = async (req: Request, res: Response, next: NextFunction) => {
     try {
         await UserService.logout(req.user._id)
 
@@ -55,7 +55,7 @@ const logout = async (req: Request | any, res: Response, next: NextFunction) => 
     }
 }
 
-const changePassword = async (req: Request | any, res: Response, next: NextFunction) => {
+const changePassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { oldPassword, newPassword } = req.body;
         await UserService.changePassword(req.user._id, oldPassword, newPassword)
@@ -139,7 +139,7 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
     }
 };
 
-const getCurrentUser = async (req: Request | any, res: Response) => {
+const getCurrentUser = async (req: Request, res: Response) => {
    const user = await UserService.getCurrentUser(req.user._id);
    return res.status(200).json({
        success: true,
@@ -147,7 +147,7 @@ const getCurrentUser = async (req: Request | any, res: Response) => {
    }) 
 }
 
-const updateUserProfile = async (req: Request | any, res: Response, next: NextFunction) => {
+const updateUserProfile = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await UserService.updateUserProfile(req.user._id, req.body);
         return res.status(200).json({
@@ -159,8 +159,9 @@ const updateUserProfile = async (req: Request | any, res: Response, next: NextFu
     }
 }
 
-const updateUserAvatar = async (req: Request | any, res: Response, next: NextFunction) => {
+const updateUserAvatar = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        req.files = req.files as { [fieldname: string]: Express.Multer.File[] };
         const user = await UserService.updateUserAvatar(req.user._id, req.files?.avatar[0]?.path);
         return res.status(200).json({
             success: true,
@@ -171,8 +172,9 @@ const updateUserAvatar = async (req: Request | any, res: Response, next: NextFun
     }
 }
 
-const updateUserCoverImage = async (req: Request | any, res: Response, next: NextFunction) => {
+const updateUserCoverImage = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        req.files = req.files as { [fieldname: string]: Express.Multer.File[] };
         const user = await UserService.updateUserCoverImage(req.user._id, req.files?.coverImage[0]?.path);
         return res.status(200).json({
             success: true,

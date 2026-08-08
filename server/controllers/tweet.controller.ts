@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import TweetService from "../services/tweet.service";
 import mongoose from "mongoose";
 
-const createTweet = async (req: Request | any, res: Response, next: NextFunction) => {
+const createTweet = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { content } = req.body;
         const id = req.user._id as string;
@@ -17,7 +17,7 @@ const createTweet = async (req: Request | any, res: Response, next: NextFunction
     }
 }
 
-const getTweetsByOwnerId = async (req: Request | any, res: Response, next: NextFunction) => {
+const getTweetsByOwnerId = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { ownerId } = req.params;
         const tweets = await TweetService.getTweetsByOwnerId(new mongoose.Types.ObjectId(ownerId as string));
@@ -31,7 +31,7 @@ const getTweetsByOwnerId = async (req: Request | any, res: Response, next: NextF
     }
 }
 
-const updateTweet = async (req: Request | any, res: Response, next: NextFunction) => {
+const updateTweet = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { tweetId } = req.params;
         const { content } = req.body;
@@ -47,7 +47,7 @@ const updateTweet = async (req: Request | any, res: Response, next: NextFunction
     }
 }
 
-const deleteTweet = async (req: Request | any, res: Response, next: NextFunction) => {
+const deleteTweet = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { tweetId } = req.params;
         const id = req.user._id as string;

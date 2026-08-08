@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import LikeService from "../services/like.service";
 import mongoose from "mongoose";
 
-const toggleVideoLike = async (req: Request | any, res: Response, next: NextFunction) => {
+const toggleVideoLike = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { videoId } = req.params;
         const userId = req.user._id;
@@ -22,7 +22,7 @@ const toggleVideoLike = async (req: Request | any, res: Response, next: NextFunc
     }
 }
 
-const toggleCommentLike = async (req: Request | any, res: Response, next: NextFunction) => {
+const toggleCommentLike = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { commentId } = req.params;
         const userId = req.user._id;
@@ -42,7 +42,7 @@ const toggleCommentLike = async (req: Request | any, res: Response, next: NextFu
     }
 }
 
-const toggleTweetLike = async (req: Request | any, res: Response, next: NextFunction) => {
+const toggleTweetLike = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { tweetId } = req.params;
         const userId = req.user._id;
@@ -62,7 +62,7 @@ const toggleTweetLike = async (req: Request | any, res: Response, next: NextFunc
     }
 }
 
-const getLikedVideos = async (req: Request | any, res: Response, next: NextFunction) => {
+const getLikedVideos = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.user._id;
         const { page = 1, limit = 10 } = req.query;
