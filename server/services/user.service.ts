@@ -127,6 +127,13 @@ class UserService{
         }
         return channel;
     }
+    static async getUserWatchHistory(userId: string) {
+        const user = await UserRepository.getWatchHistory(userId);
+        if(!user){
+            throw new ApiError(404, "User not found")
+        }
+        return user.watchHistory;
+    }
 }
 
 export default UserService;

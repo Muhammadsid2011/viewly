@@ -197,6 +197,17 @@ const getUserChannelProfile = async (req: Request, res: Response, next: NextFunc
         next(error);
     }
 }
+const getUserWatchHistory = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const watchHistory = await UserService.getUserWatchHistory(req.user._id);
+        return res.status(200).json({
+            success: true,
+            data: watchHistory
+        });
+    } catch (error) {
+        next(error);
+    }
+}
 
 export {
     login,
@@ -208,5 +219,6 @@ export {
     updateUserProfile,
     updateUserAvatar,
     updateUserCoverImage,
-    getUserChannelProfile
+    getUserChannelProfile,
+    getUserWatchHistory
 }

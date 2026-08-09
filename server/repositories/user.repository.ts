@@ -147,6 +147,9 @@ class UserReposiitory {
         ])
         return channel[0];
     }
+    static getWatchHistory(id: string){
+        return User.findById(id).populate("watchHistory");
+    }
 }
 
 export default UserReposiitory;
