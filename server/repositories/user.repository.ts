@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import User from "../models/user.model";
 import { CreateUserDto } from "../types/user.types";
 
@@ -89,6 +90,62 @@ class UserReposiitory {
         }, {
             new: true
         })
+    }
+    static async getChannelProfileById(userId: string, channelUsername: string) {
+        const channel = await User.aggregate([
+            {
+                $match: {
+                    username: channelUsername
+                }
+            },
+            {
+                $lookup: {
+                    from: "subscriptions",
+                    localField: "_id",
+                    foreignField: "channel",
+                    as: "subscribers"
+                }
+            },
+            {
+                $lookup: {
+                    from: "subscriptions",
+                    localField: "_id",
+                    foreignField: "subscriber",
+                    as: "subscribedTo"
+                }
+            },
+            {
+                $addFields: {
+                    subscribersCount: {
+                        $size: "$subscribers"
+                    },
+                    channelsSubscribedToCount: {
+                        $size: "$subscribedTo"
+                    },
+                    isSubscribed: {
+                        $cond: {
+                            if: { $in: [userId, "$subscribers.subscriber"] },
+                            then: true,
+                            else: false
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    fullName: 1,
+                    username: 1,
+                    subscribersCount: 1,
+                    channelsSubscribedToCount: 1,
+                    isSubscribed: 1,
+                    avatar: 1,
+                    coverImage: 1,
+                    email: 1
+
+                }
+            }
+        ])
+        return channel[0];
     }
 }
 
