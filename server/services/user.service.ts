@@ -120,6 +120,13 @@ class UserService{
         }
         return user;
     }
+    static async getUserChannelProfile(userId: string, channelUsername: string) {
+        const channel = await UserRepository.getChannelProfileById(userId, channelUsername);
+        if(!channel || channel.length === 0){
+            throw new ApiError(404, "Channel not found")
+        }
+        return channel;
+    }
 }
 
 export default UserService;
