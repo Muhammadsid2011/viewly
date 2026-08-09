@@ -8,7 +8,8 @@ import {
   getCurrentUser,
   updateUserProfile,
   updateUserAvatar,
-  updateUserCoverImage
+  updateUserCoverImage,
+  getUserChannelProfile
 } from "../controllers/user.controller";
 import { validate } from "../middlewares/validate.middleware";
 import {
@@ -43,6 +44,8 @@ router.patch("/update-user-avatar", verifyJWT, upload.fields([
 router.patch("/update-user-cover-image", verifyJWT, upload.fields([
   { name: "coverImage", maxCount: 1 }
 ]), updateUserCoverImage)
+
+router.get("/channel/:channelUsername", verifyJWT, getUserChannelProfile)
 
 // TODO: make get user profile route and get Watch History route
 

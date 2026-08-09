@@ -185,6 +185,19 @@ const updateUserCoverImage = async (req: Request, res: Response, next: NextFunct
     }
 }
 
+const getUserChannelProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { channelUsername } = req.params;
+        const channel = await UserService.getUserChannelProfile(req.user._id, channelUsername as string);
+        return res.status(200).json({
+            success: true,
+            data: channel
+        });
+    }catch (error) {
+        next(error);
+    }
+}
+
 export {
     login,
     register,
@@ -194,5 +207,6 @@ export {
     getCurrentUser,
     updateUserProfile,
     updateUserAvatar,
-    updateUserCoverImage
+    updateUserCoverImage,
+    getUserChannelProfile
 }
