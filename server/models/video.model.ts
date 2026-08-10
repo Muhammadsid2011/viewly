@@ -20,6 +20,10 @@ const videoSchema = new Schema<IVideo>({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     duration: {
         type: Number,
         required: true

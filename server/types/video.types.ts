@@ -6,6 +6,7 @@ export interface IVideo{
     thumbnail: string;
     owner: mongoose.Types.ObjectId;
     title: string;
+    description: string;
     duration: number;
     views: number;
     isPublished: boolean;
@@ -18,5 +19,6 @@ export interface CreateVideoDto {
     thumbnail: string;
     duration: number;
     owner: mongoose.Types.ObjectId;
+    description: string;
     isPublished?: boolean;
 }

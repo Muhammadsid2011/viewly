@@ -6,7 +6,11 @@ export const createVideoSchema = z.object({
     .trim()
     .min(3, "Title must be at least 3 characters")
     .max(100),
-
+  description: z
+    .string()
+    .trim()
+    .min(3, "Description must be at least 3 characters")
+    .max(1000),
   isPublished: z.boolean().optional().default(true),
 });
 

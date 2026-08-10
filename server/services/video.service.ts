@@ -14,6 +14,7 @@ class VideoService {
         if (existingVideo) {
             throw new ApiError(400, "Video with this title already exists");
         }
+        console.log("data", data);
 
         const videoFile = await uploadOncloudinary(data.videoFile);
         const thumbnail = await uploadOncloudinary(data.thumbnail);
@@ -63,7 +64,7 @@ class VideoService {
     }
     static deleteVideo = async (id: mongoose.Types.ObjectId) => {
         const video = await VideoRepository.deleteVideoById(id)
-        if(!video){
+        if (!video) {
             throw new ApiError(404, "Video not found")
         }
         deleteVideoOnCloudinary(video.videoFile as string)

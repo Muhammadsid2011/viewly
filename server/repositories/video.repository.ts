@@ -21,6 +21,10 @@ class VideoRepository {
                         $regex: query as string,
                         $options: "i",
                     },
+                    description: {
+                        $regex: query as string,
+                        $options: "i",
+                    }
                 }
             ];
         }
@@ -91,7 +95,7 @@ class VideoRepository {
         return video;
     }
     static deleteVideoById = async (id: mongoose.Types.ObjectId) => {
-        const video = await Video.findByIdAndDelete(id)
+        const video = await Video.findByIdAndDelete(id);
         return video;
     }
     static getIsPublishedStatus = async (id: mongoose.Types.ObjectId): Promise<boolean> => {
