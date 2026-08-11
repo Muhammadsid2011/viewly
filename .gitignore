@@ -10,6 +10,7 @@ dist
 /build/
 /out/
 *.egg-info/
+design
 
 # Environment Variables & Secrets (CRITICAL)
 .env
