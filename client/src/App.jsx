@@ -1,12 +1,10 @@
-import React from 'react'
-import './App.css'
+import HomeFeed from './components/HomeFeed';
+import './index.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <></>
-  )
+    <HomeFeed />
+  );
 }
 
-export default App
+export default App;

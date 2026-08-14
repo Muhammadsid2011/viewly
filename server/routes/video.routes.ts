@@ -14,7 +14,7 @@ import { upload } from "../middlewares/multer.middleware";
 
 const router = Router();
 
-router.get("/", verifyJWT, getAllVideos);
+router.get("/", getAllVideos);
 
 router.post("/publish", verifyJWT,upload.fields([
     { name: "videoFile", maxCount: 1 },
