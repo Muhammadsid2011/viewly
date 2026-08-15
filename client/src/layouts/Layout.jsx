@@ -1,6 +1,8 @@
 import React from 'react'
-import TopNavBar from '../components/TopNavBar'
-import SideNavBar from '../components/SideNavBar'
+import {
+  TopNavBar,
+  SideNavBar
+} from "../components"
 import { Outlet } from 'react-router-dom'
 
 function Layout() {

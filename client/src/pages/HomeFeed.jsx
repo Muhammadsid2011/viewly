@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import TopNavBar from '../components/TopNavBar';
-import SideNavBar from '../components/SideNavBar';
-import CategoryChips from '../components/CategoryChips';
-import VideoGrid from '../components/VideoGrid';
+import {
+  CategoryChips,
+  VideoGrid
+} from "../components"
 
 function HomeFeed() {
   const [activeCategory, setActiveCategory] = useState('All');
