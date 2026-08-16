@@ -11,9 +11,11 @@ import tweetRouter from "./routes/tweet.routes";
 import likeRouter from "./routes/like.routes";
 import dashboardRouter from "./routes/dashboard.routes";
 import healthRouter from "./routes/health.routes";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
 app.use(helmet())
 app.use(morgan("dev"))
 app.use(cookieParser())
