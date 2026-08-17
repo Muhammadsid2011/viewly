@@ -26,3 +26,9 @@ const refreshAccessToken = async () => {
         throw error;
     }
 }
+
+export {
+    register,
+    login,
+    refreshAccessToken
+}
