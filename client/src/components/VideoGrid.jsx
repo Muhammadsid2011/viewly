@@ -1,5 +1,6 @@
 import React from 'react';
 import VideoCard from './VideoCard';
+import api from '../api/axios';
 import axios from 'axios';
 
 // const videos = [
@@ -45,47 +46,14 @@ import axios from 'axios';
 //   },
 // ];
 
-const videos = {
-    "data": {
-        "docs": [
-            {
-                "_id": "6a79b68f20aaeaed1269593f",
-                "videoFile": "http://res.cloudinary.com/dnuu0gvwr/video/upload/v1786361485/o3vvzgpajddebskakl3f.mp4",
-                "thumbnail": "http://res.cloudinary.com/dnuu0gvwr/image/upload/v1786361486/xpjkrrkuxu7jjjfaowht.jpg",
-                "owner": {
-                    "_id": "6a5fa0986a99e90aac76515a",
-                    "username": "john",
-                    "fullName": "John Doe",
-                    "avatar": "https://res.cloudinary.com/dnuu0gvwr/image/upload/v1784651700/images_yz2vis.png"
-                },
-                "title": "roblox",
-                "description": "playing roblox",
-                "duration": 0.21,
-                "views": 0,
-                "isPublished": true,
-                "createdAt": "2026-08-10T11:31:27.168Z",
-                "updatedAt": "2026-08-10T11:31:27.168Z",
-                "__v": 0
-            }
-        ],
-        "totalDocs": 1,
-        "limit": 10,
-        "page": 1,
-        "totalPages": 1,
-        "pagingCounter": 1,
-        "hasPrevPage": false,
-        "hasNextPage": false,
-        "prevPage": null,
-        "nextPage": null
-    }
-}
+const videos = await api.get("/api/videos");
 
-// const videos = await axios.get("http://localhost:8080/api/videos")
+console.log(videos)
 
 function VideoGrid() {
   return (
     <div className="p-4 md:p-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-md">
-      {videos.data.docs.map((video) => (
+      {videos?.data.data.docs.map((video) => (
         <VideoCard key={video._id} {...video} />
       ))}
     </div>
