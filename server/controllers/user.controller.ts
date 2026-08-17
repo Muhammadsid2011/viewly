@@ -118,7 +118,8 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
         });
 
 
-        return res.cookie(
+        return res.status(204)
+        .cookie(
             "accessToken",
             newAccessToken,
             cookieOptions
@@ -126,10 +127,7 @@ const refreshAccessToken = async (req: Request, res: Response, next: NextFunctio
             "refreshToken",
             newRefreshToken,
             cookieOptions
-        )
-            .json({
-                message: "Token refreshed"
-            });
+        ).send();
 
 
     } catch (error) {
