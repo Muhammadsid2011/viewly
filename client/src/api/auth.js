@@ -27,6 +27,16 @@ const logout = async () => {
     }
 }
 
+const getCurrentUser = async () => {
+    try {
+        const response = await api.get("/api/users/current-user");
+
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 const refreshAccessToken = async () => {
     try {
         await api.post("/api/users/refresh-accesstoken");
@@ -39,5 +49,6 @@ export {
     register,
     login,
     refreshAccessToken,
-    logout
+    logout,
+    getCurrentUser
 }

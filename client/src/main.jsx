@@ -8,6 +8,7 @@ import {
   Signup,
   Login
 } from "./pages"
+import AuthProvider from './provider/AuthProvider.jsx'
 
 const router = createBrowserRouter([
   {
@@ -31,5 +32,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')).render(
+  <AuthProvider>
     <RouterProvider router={router} />,
+  </AuthProvider>
 )
