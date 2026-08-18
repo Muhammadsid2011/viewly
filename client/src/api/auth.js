@@ -19,6 +19,14 @@ const login = async (data) => {
     }
 }
 
+const logout = async () => {
+    try {
+        await api.post("/api/users/logout");
+    } catch (error) {
+        throw error;
+    }
+}
+
 const refreshAccessToken = async () => {
     try {
         await api.post("/api/users/refresh-accesstoken");
@@ -30,5 +38,6 @@ const refreshAccessToken = async () => {
 export {
     register,
     login,
-    refreshAccessToken
+    refreshAccessToken,
+    logout
 }
