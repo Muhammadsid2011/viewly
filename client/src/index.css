@@ -195,3 +195,7 @@
     line-height: var(--line-height-headline-lg);
   }
 }
+
+body{
+  overflow-x:hidden;
+}

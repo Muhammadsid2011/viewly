@@ -1,5 +1,6 @@
 import {
   Menu,
+  X,
   Search,
   Upload,
   Bell,
@@ -8,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import { logout } from '../api/auth';
 
-function TopNavBar() {
+function TopNavBar({ onMenuClick, isOpen }) {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const logoutUser = useAuthStore((state) => state.logout);
@@ -29,8 +30,8 @@ function TopNavBar() {
   return (
     <header className="flex justify-between items-center px-4 md:px-lg h-16 w-full sticky top-0 z-50 bg-surface border-b border-surface-container-high">
       <div className="flex items-center gap-md">
-        <button className="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors">
-          <Menu className="size-6" aria-hidden="true" />
+        <button className="md:hidden p-2 text-on-surface hover:bg-surface-container-high rounded-full transition-colors" onClick={onMenuClick} aria-label={isOpen ? "Close menu" : "Open menu"}>
+          {isOpen ? <X className="size-6" aria-hidden="true" /> : <Menu className="size-6" aria-hidden="true" />}
         </button>
         <a className="font-headline-lg font-black text-primary" href="#">
           Viewly

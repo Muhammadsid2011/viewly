@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Home,
   Package,
@@ -67,27 +66,38 @@ function SectionHeader({ title, subtitle }) {
   );
 }
 
-function SideNavBar() {
+function SideNavBar({ isOpen, onClose }) {
   return (
-    <nav className="hidden md:flex flex-col fixed left-0 top-16 h-[calc(100vh-64px)] p-md overflow-y-auto w-64 bg-surface-container z-40 hide-scrollbar border-r border-surface-container-high">
-      {navItems.map((section, sectionIndex) => (
-        <div key={section.section} className="mb-lg">
-          {sectionIndex > 0 && <hr className="border-surface-container-highest my-sm" />}
-          <SectionHeader title={section.section} subtitle={section.section === 'Library' ? 'Your content' : undefined} />
-          <div className="flex flex-col gap-1">
-            {section.items.map((item) => (
-              <NavItem
-                key={item.label}
-                icon={item.icon}
-                label={item.label}
-                active={item.active}
-                fill={item.fill}
-              />
-            ))}
+    <>
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+      <nav className={`flex-col fixed left-0 top-16 h-[calc(100vh-64px)] p-md overflow-y-auto w-64 bg-surface-container z-50 hide-scrollbar border-r border-surface-container-high transition-transform duration-300 ease-in-out ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      } md:translate-x-0 md:fixed md:h-[calc(100vh-64px)] md:w-64 md:z-40`}>
+        {navItems.map((section, sectionIndex) => (
+          <div key={section.section} className="mb-lg">
+            {sectionIndex > 0 && <hr className="border-surface-container-highest my-sm" />}
+            <SectionHeader title={section.section} subtitle={section.section === 'Library' ? 'Your content' : undefined} />
+            <div className="flex flex-col gap-1">
+              {section.items.map((item) => (
+                <NavItem
+                  key={item.label}
+                  icon={item.icon}
+                  label={item.label}
+                  active={item.active}
+                  fill={item.fill}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-    </nav>
+        ))}
+      </nav>
+    </>
   );
 }
 

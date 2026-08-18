@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   TopNavBar,
   SideNavBar
@@ -6,11 +6,15 @@ import {
 import { Outlet } from 'react-router-dom'
 
 function Layout() {
+  const [isSideNavOpen, setIsSideNavOpen] = useState(false)
+
   return (
     <>
-      <TopNavBar />
-      <SideNavBar />
-      <Outlet />
+      <TopNavBar onMenuClick={() => setIsSideNavOpen(prev => !prev)} isOpen={isSideNavOpen} />
+      <div className="flex">
+        <SideNavBar isOpen={isSideNavOpen} onClose={() => setIsSideNavOpen(false)} />
+        <Outlet />
+      </div>
     </>
   )
 }

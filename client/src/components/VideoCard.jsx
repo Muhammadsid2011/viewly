@@ -18,8 +18,8 @@ function VideoCard({ thumbnail, duration, title, owner, views }) {
           alt=""
         />
         <div className="flex flex-col min-w-0">
-          <h3 className="font-title-md text-on-surface line-clamp-2 leading-tight">{title}</h3>
-          <div className="mt-1 flex flex-col font-meta-sm text-on-surface-variant">
+          <h3 className="font-title-md text-on-surface line-clamp-2 leading-tight sm:line-clamp-1">{title}</h3>
+          <div className="mt-1 flex flex-col font-meta-sm text-on-surface-variant sm:flex-row sm:gap-2">
             <span>{owner.fullName}</span>
             <span>{views} views</span>
           </div>

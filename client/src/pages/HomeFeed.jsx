@@ -9,12 +9,10 @@ function HomeFeed() {
 
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col">
-      <div className="flex flex-1 overflow-hidden">
-        <main className="flex-1 md:ml-64 w-full bg-background flex flex-col">
-          <CategoryChips activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
-          <VideoGrid />
-        </main>
-      </div>
+      <main className="flex-1 w-full bg-background flex flex-col md:ml-64">
+        <CategoryChips activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
+        <VideoGrid />
+      </main>
     </div>
   );
 }
