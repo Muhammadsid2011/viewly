@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { User, AtSign, Mail, Lock } from "lucide-react"
 import useAuthStore from '../store/authStore';
 import { register } from '../api/auth';
@@ -54,7 +54,7 @@ export default function CreateAccount() {
       navigate("/");
     } catch (error) {
       console.error(error);
-      
+
     } finally {
       setLoading(false);
     }
@@ -98,6 +98,12 @@ export default function CreateAccount() {
             Create Account
           </button>
         </form>
+        <div className="mt-8 pt-6 border-t border-[#2a2929] text-center">
+          <p className="text-sm text-[#a0a0a0]">
+            Already have an account?{' '}
+            <Link to="/auth/login" className="text-[#ffb3a7] font-semibold hover:underline">Sign in</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
