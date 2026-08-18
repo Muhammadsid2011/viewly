@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, AtSign, Mail, Lock } from "lucide-react"
+import useAuthStore from '../store/authStore';
+import { register } from '../api/auth';
 
 export default function CreateAccount() {
+
+  const navigate = useNavigate();
+  const setUser = useAuthStore((state) => state.setUser);
 
   const [form, setForm] = useState({
     username: "",
@@ -9,6 +15,8 @@ export default function CreateAccount() {
     fullName: "",
     password: "",
   })
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const fields = [
     { label: 'FULL NAME', icon: User, placeholder: 'Enter your full name', type: 'text' },
@@ -30,7 +38,26 @@ export default function CreateAccount() {
     if (label === 'PASSWORD') {
       setForm((prev) => ({ ...prev, password: e.target.value }))
     }
-    console.log(form)
+  }
+
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault()
+      setLoading(true);
+      setError("");
+      console.log(form);
+      const response = await register(form);
+      const user = response.data.user;
+
+      setUser(user);
+
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -42,7 +69,7 @@ export default function CreateAccount() {
           <p className="text-[#f8d7d2]/60 mt-2">Join the premiere streaming experience.</p>
         </div>
 
-        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-6" onSubmit={handleSubmit}>
           {fields.map((field) => (
             <div key={field.label} className="space-y-2">
               <label className="text-[10px] font-bold tracking-widest text-[#f8d7d2]/50 uppercase">
@@ -61,9 +88,10 @@ export default function CreateAccount() {
               </div>
             </div>
           ))}
-
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {loading && <p className="text-[#f8d7d2]/60 text-sm">Creating account...</p>}
           <button
-            onClick={handleClick}
+            disabled={loading}
             type="submit"
             className="w-full bg-[#f8d7d2] text-[#1a1a1a] font-bold py-3.5 rounded-lg hover:bg-[#f8d7d2]/90 transition-colors mt-8"
           >
