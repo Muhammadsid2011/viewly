@@ -26,7 +26,7 @@ function CategoryChip({ label, active, onClick }) {
 
 function CategoryChips({ activeCategory, onCategoryChange }) {
   return (
-    <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm px-4 md:px-lg py-sm border-b border-surface-container flex items-center gap-sm overflow-x-auto hide-scrollbar w-full">
+    <div className="sticky top-16 z-30 bg-background/95 backdrop-blur-sm px-4 md:px-lg py-sm border-b border-surface-container flex items-center gap-sm overflow-x-auto hide-scrollbar w-full">
       {categories.map((category) => (
         <CategoryChip
           key={category.label}
