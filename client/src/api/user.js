@@ -14,6 +14,12 @@ export const getWatchHistory = async () => {
   return res.data;
 };
 
+// PATCH /api/users/watch-history/:videoId — auth. Add video to watch history.
+export const addToWatchHistory = async (videoId) => {
+  const res = await api.patch(`/api/users/watch-history/${videoId}`);
+  return res.data;
+};
+
 // PATCH /api/users/update-user-profile — auth. Body: { username?, email? }.
 export const updateProfile = async (data) => {
   const res = await api.patch("/api/users/update-user-profile", data);

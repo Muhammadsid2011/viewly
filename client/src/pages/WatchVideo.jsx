@@ -13,6 +13,7 @@ import {
 import Avatar from "../components/Avatar";
 import Spinner from "../components/Spinner";
 import { getVideoById, getVideos, incrementViews } from "../api/video";
+import { addToWatchHistory } from "../api/user";
 import { getUserChannel } from "../api/user";
 import { toggleSubscription } from "../api/subscription";
 import { toggleVideoLike, getLikedVideos } from "../api/like";
@@ -45,6 +46,31 @@ function WatchVideo() {
   const [videoElement, setVideoElement] = useState(null);
 
   const isOwnVideo = currentUser && video?.owner?._id === currentUser._id;
+
+  // Add to watch history when video starts playing
+  useEffect(() => {
+    const videoEl = videoElement;
+    if (!videoEl || !currentUser) return;
+
+    let added = false;
+
+    const handlePlay = async () => {
+      if (added) return;
+      console.log("[WatchVideo] Video played, adding to watch history...");
+      try {
+        await addToWatchHistory(videoId);
+        added = true;
+        console.log("[WatchVideo] Added to watch history");
+      } catch (err) {
+        console.error("[WatchVideo] Failed to add to watch history:", err);
+      }
+    };
+
+    videoEl.addEventListener("play", handlePlay);
+    return () => {
+      videoEl.removeEventListener("play", handlePlay);
+    };
+  }, [videoId, videoElement, currentUser]);
 
   // Increment views when video ends
   useEffect(() => {
