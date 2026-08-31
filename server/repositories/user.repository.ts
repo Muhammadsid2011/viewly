@@ -148,14 +148,26 @@ class UserReposiitory {
         return channel[0];
     }
     static getWatchHistory(id: string){
-        return User.findById(id).populate("watchHistory");
+        return User.findById(id).populate({
+            path: "watchHistory",
+            populate: {
+                path: "owner",
+                select: "fullName username avatar"
+            }
+        });
     }
     static async addToWatchHistory(userId: string, videoId: mongoose.Types.ObjectId) {
         const user = await User.findByIdAndUpdate(
             userId,
             { $addToSet: { watchHistory: videoId } },
             { new: true }
-        ).populate("watchHistory");
+        ).populate({
+            path: "watchHistory",
+            populate: {
+                path: "owner",
+                select: "fullName username avatar"
+            }
+        });
         return user?.watchHistory;
     }
 }
