@@ -226,6 +226,24 @@ function WatchVideo() {
     }
   };
 
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(video.videoFile);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${video.title || "video"}.mp4`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      toast.success("Download started");
+    } catch {
+      toast.error("Failed to download video");
+    }
+  };
+
   const handleAddComment = async (e) => {
     e.preventDefault();
     const content = commentText.trim();
@@ -368,14 +386,12 @@ function WatchVideo() {
                 >
                   <Share2 className="size-5" aria-hidden="true" /> Share
                 </button>
-                <a
-                  href={video.videoFile}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={handleDownload}
                   className="flex items-center gap-xs px-md py-sm bg-surface-container-high hover:bg-surface-container-highest rounded-full text-on-surface transition-colors shrink-0 font-meta-sm font-bold"
                 >
                   <Download className="size-5" aria-hidden="true" /> Download
-                </a>
+                </button>
               </div>
             </div>
 
