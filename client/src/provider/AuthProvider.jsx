@@ -1,26 +1,34 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { getCurrentUser } from '../api/auth';
 import useAuthStore from '../store/authStore';
+import { getToken, clearToken } from '../api/axios';
 
 function AuthProvider({ children }) {
-
     const setUser = useAuthStore((state) => state.setUser);
+    const setAuthLoading = useAuthStore((state) => state.setAuthLoading);
 
     useEffect(() => {
-        const fetchCurrentUser = async () => {
+        const bootstrap = async () => {
+            if (!getToken()) {
+                setAuthLoading(false);
+                return;
+            }
             try {
                 const response = await getCurrentUser();
-                const user = response.data;
-                setUser(user);
-            } catch (error) {
-                console.error('Error fetching current user:', error);
+                setUser(response.data);
+            } catch {
+                // Token missing/expired/invalid — the interceptor already cleared it.
+                clearToken();
+                setUser(null);
+            } finally {
+                setAuthLoading(false);
             }
         };
 
-        fetchCurrentUser();
-    },[]);
+        bootstrap();
+    }, [setUser, setAuthLoading]);
 
-    return children
+    return children;
 }
 
-export default AuthProvider
+export default AuthProvider;
