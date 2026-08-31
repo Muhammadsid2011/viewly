@@ -10,7 +10,8 @@ import {
   updateUserAvatar,
   updateUserCoverImage,
   getUserChannelProfile,
-  getUserWatchHistory
+  getUserWatchHistory,
+  addToWatchHistory
 } from "../controllers/user.controller";
 import { validate } from "../middlewares/validate.middleware";
 import {
@@ -49,5 +50,7 @@ router.patch("/update-user-cover-image", verifyJWT, upload.fields([
 router.get("/channel/:channelUsername", verifyJWT, getUserChannelProfile)
 
 router.get("/watch-history", verifyJWT, getUserWatchHistory)
+
+router.patch("/watch-history/:videoId", verifyJWT, addToWatchHistory)
 
 export default router;

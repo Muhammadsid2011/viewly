@@ -150,6 +150,14 @@ class UserReposiitory {
     static getWatchHistory(id: string){
         return User.findById(id).populate("watchHistory");
     }
+    static async addToWatchHistory(userId: string, videoId: mongoose.Types.ObjectId) {
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $addToSet: { watchHistory: videoId } },
+            { new: true }
+        ).populate("watchHistory");
+        return user?.watchHistory;
+    }
 }
 
 export default UserReposiitory;

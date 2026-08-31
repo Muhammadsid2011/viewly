@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { uploadOncloudinary } from '../config/cloudinary';
 import UserRepository from '../repositories/user.repository';
 import { CreateUserDto, LoginUserDto, UpdateUserProfileDto } from '../types/user.types';
@@ -133,6 +134,10 @@ class UserService{
             throw new ApiError(404, "User not found")
         }
         return user.watchHistory;
+    }
+    static async addToWatchHistory(userId: string, videoId: mongoose.Types.ObjectId) {
+        const watchHistory = await UserRepository.addToWatchHistory(userId, videoId);
+        return watchHistory;
     }
 }
 

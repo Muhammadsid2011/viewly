@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import mongoose from "mongoose";
 import UserService from "../services/user.service";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
@@ -207,6 +208,21 @@ const getUserWatchHistory = async (req: Request, res: Response, next: NextFuncti
     }
 }
 
+const addToWatchHistory = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const videoId = req.params.videoId as string;
+        const userId = req.user._id as string;
+        const watchHistory = await UserService.addToWatchHistory(userId, new mongoose.Types.ObjectId(videoId));
+        return res.status(200).json({
+            success: true,
+            message: "Video added to watch history",
+            data: watchHistory
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 export {
     login,
     register,
@@ -218,5 +234,6 @@ export {
     updateUserAvatar,
     updateUserCoverImage,
     getUserChannelProfile,
-    getUserWatchHistory
+    getUserWatchHistory,
+    addToWatchHistory
 }
