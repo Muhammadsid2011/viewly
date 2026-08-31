@@ -1,107 +1,96 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, AtSign, Mail, Lock } from "lucide-react"
+import { User, AtSign, Mail, Lock } from "lucide-react";
 import useAuthStore from '../store/authStore';
 import { register } from '../api/auth';
+import { setToken } from '../api/axios';
+import { getErrorMessage } from '../utils/format';
+import Spinner from '../components/Spinner';
 
-export default function CreateAccount() {
+const FIELDS = [
+  { key: 'fullName', label: 'Full name', icon: User, placeholder: 'Enter your full name', type: 'text' },
+  { key: 'username', label: 'Username', icon: AtSign, placeholder: 'Choose a username', type: 'text' },
+  { key: 'email', label: 'Email address', icon: Mail, placeholder: 'Enter your email', type: 'email' },
+  { key: 'password', label: 'Password', icon: Lock, placeholder: 'Create a password', type: 'password' },
+];
 
+export default function Signup() {
   const navigate = useNavigate();
   const setUser = useAuthStore((state) => state.setUser);
 
-  const [form, setForm] = useState({
-    username: "",
-    email: "",
-    fullName: "",
-    password: "",
-  })
+  const [form, setForm] = useState({ username: "", email: "", fullName: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const fields = [
-    { label: 'FULL NAME', icon: User, placeholder: 'Enter your full name', type: 'text' },
-    { label: 'USERNAME', icon: AtSign, placeholder: 'Choose a username', type: 'text' },
-    { label: 'EMAIL ADDRESS', icon: Mail, placeholder: 'Enter your email', type: 'email' },
-    { label: 'PASSWORD', icon: Lock, placeholder: 'Create a password', type: 'password' },
-  ];
-
-  const handleChange = (e, label) => {
-    if (label === 'FULL NAME') {
-      setForm((prev) => ({ ...prev, fullName: e.target.value }))
-    }
-    if (label === 'USERNAME') {
-      setForm((prev) => ({ ...prev, username: e.target.value }))
-    }
-    if (label === 'EMAIL ADDRESS') {
-      setForm((prev) => ({ ...prev, email: e.target.value }))
-    }
-    if (label === 'PASSWORD') {
-      setForm((prev) => ({ ...prev, password: e.target.value }))
-    }
-  }
+  const handleChange = (key, value) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault()
       setLoading(true);
       setError("");
-      console.log(form);
       const response = await register(form);
-      const user = response.data.user;
-
-      setUser(user);
-
+      // Store the access token for Bearer auth (secure cookies don't persist on http localhost).
+      setToken(response.data.accessToken);
+      setUser(response.data.user);
       navigate("/");
-    } catch (error) {
-      console.error(error);
-
+    } catch (err) {
+      setError(getErrorMessage(err, "Could not create your account."));
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="min-h-screen w-full bg-[#0a0a0a] flex items-center justify-center p-4 font-sans text-[#f8d7d2]">
-      <div className="w-full max-w-[500px] bg-[#1a1a1a] border border-[#333] rounded-2xl p-8 md:p-10 shadow-2xl">
+    <div className="min-h-screen w-full bg-background flex items-center justify-center p-4">
+      <div className="w-full max-w-[500px] bg-surface-container border border-surface-container-high rounded-2xl p-8 md:p-10 shadow-2xl">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-[#f8d7d2]">Viewly</h1>
-          <h2 className="text-xl font-medium text-[#f8d7d2]/80">Create your account</h2>
-          <p className="text-[#f8d7d2]/60 mt-2">Join the premiere streaming experience.</p>
+          <Link to="/" className="font-headline-lg text-primary font-black inline-block mb-2">Viewly</Link>
+          <h2 className="font-title-md text-on-surface">Create your account</h2>
+          <p className="font-meta-sm text-on-surface-variant mt-1">Join the premiere streaming experience.</p>
         </div>
 
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          {fields.map((field) => (
-            <div key={field.label} className="space-y-2">
-              <label className="text-[10px] font-bold tracking-widest text-[#f8d7d2]/50 uppercase">
+        <form className="space-y-5" onSubmit={handleSubmit}>
+          {FIELDS.map((field) => (
+            <div key={field.key} className="space-y-2">
+              <label htmlFor={field.key} className="font-label-xs text-on-surface-variant uppercase block">
                 {field.label}
               </label>
               <div className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#f8d7d2]/40">
-                  <field.icon />
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">
+                  <field.icon className="size-5" aria-hidden="true" />
                 </div>
                 <input
-                  onChange={e => handleChange(e, field.label)}
+                  id={field.key}
+                  value={form[field.key]}
+                  onChange={(e) => handleChange(field.key, e.target.value)}
                   type={field.type}
                   placeholder={field.placeholder}
-                  className="w-full bg-[#262626] border border-[#404040] text-[#f8d7d2] rounded-lg py-3 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-[#f8d7d2]/20 transition-all placeholder:text-[#f8d7d2]/30"
+                  required
+                  className="w-full bg-surface-container-high border border-surface-container-highest text-on-surface rounded-lg py-3 pl-11 pr-4 focus:outline-none focus:border-primary transition-colors placeholder:text-on-surface-variant font-body-md"
                 />
               </div>
             </div>
           ))}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          {loading && <p className="text-[#f8d7d2]/60 text-sm">Creating account...</p>}
+
+          {error && <p className="font-meta-sm text-error">{error}</p>}
+
           <button
             disabled={loading}
             type="submit"
-            className="w-full bg-[#f8d7d2] text-[#1a1a1a] font-bold py-3.5 rounded-lg hover:bg-[#f8d7d2]/90 transition-colors mt-8"
+            className="w-full bg-primary text-on-primary font-title-md py-3.5 rounded-lg hover:bg-primary-container transition-colors mt-2 disabled:opacity-60 flex items-center justify-center gap-sm"
           >
-            Create Account
+            {loading && <Spinner className="size-5" />}
+            {loading ? 'Creating account…' : 'Create Account'}
           </button>
         </form>
-        <div className="mt-8 pt-6 border-t border-[#2a2929] text-center">
-          <p className="text-sm text-[#a0a0a0]">
+
+        <div className="mt-8 pt-6 border-t border-surface-container-high text-center">
+          <p className="font-meta-sm text-on-surface-variant">
             Already have an account?{' '}
-            <Link to="/auth/login" className="text-[#ffb3a7] font-semibold hover:underline">Sign in</Link>
+            <Link to="/auth/login" className="text-primary font-semibold hover:underline">Sign in</Link>
           </p>
         </div>
       </div>
