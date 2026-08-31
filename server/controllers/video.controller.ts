@@ -3,6 +3,22 @@ import VideoService from "../services/video.service";
 import { ApiError } from "../utils/ApiError";
 import mongoose from "mongoose";
 
+const incrementViews = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const videoId = new mongoose.Types.ObjectId(id as string);
+
+        const video = await VideoService.incrementViews(videoId);
+        res.status(200).json({
+            success: true,
+            message: "Views incremented successfully",
+            data: video,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 const getAllVideos = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const {
@@ -120,5 +136,6 @@ export {
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
+    incrementViews
 }

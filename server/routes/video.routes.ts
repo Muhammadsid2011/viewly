@@ -3,6 +3,7 @@ import {
     deleteVideo,
     getAllVideos,
     getVideoById,
+    incrementViews,
     publishVideo,
     togglePublishStatus,
     updateVideo
@@ -22,6 +23,8 @@ router.post("/publish", verifyJWT,upload.fields([
 ]), validate(createVideoSchema), publishVideo);
 
 router.get("/:id", verifyJWT, getVideoById);
+
+router.patch("/increment-views/:id", incrementViews);
 
 router.patch("/toggle-publish-status/:id", verifyJWT, togglePublishStatus);
 

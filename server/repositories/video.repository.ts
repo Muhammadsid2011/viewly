@@ -122,5 +122,13 @@ class VideoRepository {
             { new: true }
         );
     }
+    static incrementViews = async (id: mongoose.Types.ObjectId) => {
+        const video = await Video.findByIdAndUpdate(
+            id,
+            { $inc: { views: 1 } },
+            { new: true }
+        );
+        return video;
+    }
 }
 export default VideoRepository;

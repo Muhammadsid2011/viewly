@@ -77,5 +77,15 @@ class VideoService {
         }
         await VideoRepository.setIsPublishedStatus(id, !publishStatus)
     }
+    static incrementViews = async (id: mongoose.Types.ObjectId) => {
+        if (!id) {
+            throw new ApiError(400, "video id is required")
+        }
+        const video = await VideoRepository.incrementViews(id);
+        if (!video) {
+            throw new ApiError(404, "video not found")
+        }
+        return video
+    }
 }
 export default VideoService;
