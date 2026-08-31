@@ -42,3 +42,9 @@ export const togglePublishStatus = async (id) => {
   const res = await api.patch(`/api/videos/toggle-publish-status/${id}`);
   return res.data;
 };
+
+// PATCH /api/videos/increment-views/:id — public.
+export const incrementViews = async (id) => {
+  const res = await api.patch(`/api/videos/increment-views/${id}`);
+  return res.data;
+};

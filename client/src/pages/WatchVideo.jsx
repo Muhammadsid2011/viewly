@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Avatar from "../components/Avatar";
 import Spinner from "../components/Spinner";
-import { getVideoById, getVideos } from "../api/video";
+import { getVideoById, getVideos, incrementViews } from "../api/video";
 import { getUserChannel } from "../api/user";
 import { toggleSubscription } from "../api/subscription";
 import { toggleVideoLike, getLikedVideos } from "../api/like";
@@ -42,8 +42,31 @@ function WatchVideo() {
   const [postingComment, setPostingComment] = useState(false);
 
   const [related, setRelated] = useState([]);
+  const [videoElement, setVideoElement] = useState(null);
 
   const isOwnVideo = currentUser && video?.owner?._id === currentUser._id;
+
+  // Increment views when video ends
+  useEffect(() => {
+    const videoEl = videoElement;
+    console.log("[WatchVideo] videoElement:", videoEl, "videoId:", videoId);
+    if (!videoEl) return;
+
+    const handleEnded = async () => {
+      console.log("[WatchVideo] Video ended, incrementing views...");
+      try {
+        const res = await incrementViews(videoId);
+        console.log("[WatchVideo] Views incremented:", res);
+      } catch (err) {
+        console.error("[WatchVideo] Failed to increment views:", err);
+      }
+    };
+
+    videoEl.addEventListener("ended", handleEnded);
+    return () => {
+      videoEl.removeEventListener("ended", handleEnded);
+    };
+  }, [videoId, videoElement]);
 
   // Primary video fetch
   useEffect(() => {
@@ -246,6 +269,7 @@ function WatchVideo() {
         <div className="flex-1 min-w-0 max-w-[1280px] w-full">
           <div className="relative w-full rounded-lg md:rounded-xl overflow-hidden bg-surface-container-lowest aspect-video shadow-lg">
             <video
+              ref={(el) => setVideoElement(el)}
               key={video._id}
               src={video.videoFile}
               poster={video.thumbnail}
