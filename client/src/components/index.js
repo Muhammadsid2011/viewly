@@ -1,13 +1,9 @@
-import CategoryChips from "./CategoryChips";
-import SideNavBar from "./SideNavBar";
-import TopNavBar from "./TopNavBar";
-import VideoCard from "./VideoCard";
-import VideoGrid from "./VideoGrid";
-
-export {
-    CategoryChips,
-    SideNavBar,
-    TopNavBar,
-    VideoCard,
-    VideoGrid
-}
+export { default as CategoryChips } from "./CategoryChips";
+export { default as SideNavBar } from "./SideNavBar";
+export { default as TopNavBar } from "./TopNavBar";
+export { default as VideoCard } from "./VideoCard";
+export { default as VideoGrid } from "./VideoGrid";
+export { default as VideoCardSkeleton } from "./VideoCardSkeleton";
+export { default as Avatar } from "./Avatar";
+export { default as Spinner } from "./Spinner";
+export { default as ProtectedRoute } from "./ProtectedRoute";
