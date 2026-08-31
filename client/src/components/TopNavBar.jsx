@@ -1,10 +1,12 @@
-import { useState } from "react";
-import { Menu, X, Search, Upload, Bell, User, LayoutDashboard, LogOut } from "lucide-react";
+import { useState, useRef } from "react";
+import { Menu, X, Search, Upload, Bell, User, LayoutDashboard, LogOut, Image } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 import { logout } from "../api/auth";
 import { clearToken } from "../api/axios";
+import { updateAvatar } from "../api/user";
 import Avatar from "./Avatar";
+import toast from "react-hot-toast";
 
 function TopNavBar({ onMenuClick, isOpen, showMenuButton = true }) {
   const navigate = useNavigate();
@@ -30,6 +32,35 @@ function TopNavBar({ onMenuClick, isOpen, showMenuButton = true }) {
       clearToken();
       logoutUser();
       navigate("/");
+    }
+  };
+
+  const avatarInputRef = useRef(null);
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be less than 5MB");
+      return;
+    }
+    setMenuOpen(false);
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      const res = await updateAvatar(formData);
+      if (res.success && res.data?.avatar) {
+        useAuthStore.getState().setUser({ ...user, avatar: res.data.avatar });
+        toast.success("Avatar updated");
+      }
+    } catch {
+      toast.error("Failed to upload avatar");
+    } finally {
+      if (avatarInputRef.current) avatarInputRef.current.value = "";
     }
   };
 
@@ -114,6 +145,21 @@ function TopNavBar({ onMenuClick, isOpen, showMenuButton = true }) {
                   <MenuLink to={`/channel/${user.username}`} icon={User} label="Your channel" onClick={() => setMenuOpen(false)} />
                   <MenuLink to="/dashboard" icon={LayoutDashboard} label="Creator dashboard" onClick={() => setMenuOpen(false)} />
                   <MenuLink to="/upload" icon={Upload} label="Upload video" onClick={() => setMenuOpen(false)} />
+                  <button
+                    onClick={() => avatarInputRef.current?.click()}
+                    className="w-full flex items-center gap-md px-4 py-2.5 text-on-surface hover:bg-surface-container-highest transition-colors"
+                  >
+                    <Image className="size-5" aria-hidden="true" />
+                    <span className="font-body-md">Change avatar</span>
+                  </button>
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                    aria-label="Upload avatar"
+                  />
                   <button
                     onClick={handleLogout}
                     className="w-full flex items-center gap-md px-4 py-2.5 text-on-surface hover:bg-surface-container-highest transition-colors border-t border-surface-container-highest"
