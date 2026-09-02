@@ -18,6 +18,7 @@ router.use(verifyJWT)
 
 router.post("/", validate(createPlaylistSchema), createPlaylist);
 router.get("/:playlistId", getPlaylistById);
+router.get("/user/me", getUsersPlaylist);
 router.get("/user/:id", getUsersPlaylist);
 router.patch("/add-video/:playlistId/:videoId", addVideoToPlaylist)
 router.delete("/remove-video/:playlistId/:videoId", removeVideoFromPlaylist)
